@@ -13,10 +13,10 @@ namespace PhotoManager.Model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ImageEntities : DbContext
+    public partial class PhotoManagerDBEntities : DbContext
     {
-        public ImageEntities()
-            : base("name=ImageEntities")
+        public PhotoManagerDBEntities()
+            : base("name=PhotoManagerDBEntities")
         {
         }
     
@@ -25,6 +25,8 @@ namespace PhotoManager.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ImageInfo> ImageInfo { get; set; }
+        public virtual DbSet<Folders> Folders { get; set; }
+        public virtual DbSet<Images> Images { get; set; }
+        public virtual DbSet<Tags> Tags { get; set; }
     }
 }

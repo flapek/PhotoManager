@@ -1,6 +1,9 @@
 ﻿using PhotoManager.Model;
 using PhotoManager.ViewModel;
+using PhotoManager.Workers;
 using PhotoManager.Workers.Open;
+using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,13 +14,14 @@ namespace PhotoManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ImageEntities entities = new ImageEntities();
+        private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
+        private ObservableCollection<DataModel> imageData = new ObservableCollection<DataModel>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = new MainViewModel(entities);
+            
 
             CarouselFolderOrImage.SelectionChanged += CarouselFolderOrImage_SelectionChanged;
         }
@@ -36,7 +40,7 @@ namespace PhotoManager
             if (viewModel == null)
                 return;
 
-            viewModel.SelectedFolderOrImage = selectedElement.DataContext as ImageModel;
+            viewModel.SelectedFolderOrImage = selectedElement.DataContext as DataModel;
         }
 
         private void ButtonLeftArrow_Click(object sender, RoutedEventArgs e)
@@ -109,27 +113,87 @@ namespace PhotoManager
                 DragMove();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+
+            foreach (var imageOrFolderInfo in managerDBEntities.Folders)
+            {
+                imageData.Add(new DataModel()
+                {
+                    Id = imageOrFolderInfo.Id,
+                    Name = imageOrFolderInfo.Name,
+                    ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(imageOrFolderInfo.MetaDataPicture),
+                    Description = imageOrFolderInfo.Description
+                });
+            }
+
+            DataContext = new MainViewModel(imageData);
+        }
+
         #endregion
 
         #region Menu Tab Control
 
         private void ButtonOpenMenuTab_Click(object sender, RoutedEventArgs e) => GridEmptyMenu.Visibility = Visibility.Visible;
 
-        private void GridEmptyMenu_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GridEmptyMenu_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => GridEmptyMenu.Visibility = Visibility.Collapsed;
+
+
+        #region ListViewItem in Menu click
+
+        private async void ListViewItem_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e) => await OpenEditingProgram.Open();        // obsłużyć dodawanie zdjęcia
+
+        private void ListViewItemFolder_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            GridEmptyMenu.Visibility = Visibility.Collapsed;
+            MainMenuPanel.Visibility = Visibility.Collapsed;
+            FolderMiniMenu.Visibility = Visibility.Visible;
         }
 
-
-        #region Button in menu
-
-        private async void ListViewItem_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        private void ListViewItemTag_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            await OpenEditingProgram.Open();        // obsłużyć dodawanie zdjęcia
+            MainMenuPanel.Visibility = Visibility.Collapsed;
+            TagMiniMenu.Visibility = Visibility.Visible;
+        }
+
+        private void ListViewItemPhoto_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MainMenuPanel.Visibility = Visibility.Collapsed;
+            PhotoMiniMenu.Visibility = Visibility.Visible;
+        }
+
+        private void BaseMainMenuPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MainMenuPanel.Visibility = Visibility.Visible;
+
+        #endregion
+
+        #region Folder interaction
+
+        /// <summary>
+        /// When user interact with folder option
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void AddFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void EditFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void DeleteFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
 
         #endregion
 
         #endregion
+
+
     }
 }

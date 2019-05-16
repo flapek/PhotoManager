@@ -72,23 +72,29 @@
     </ApplicationDefinition>
     <Compile Include="CarouselControl\CarouselControl.cs" />
     <Compile Include="CarouselControl\ICarouselControl.cs" />
-    <Compile Include="Model\ImageInfo.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Model1.Context.cs">
+    <Compile Include="Model\DB_Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
+      <DependentUpon>DB_Model.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Model1.cs">
+    <Compile Include="Model\DB_Model.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model\Model1.Designer.cs">
+    <Compile Include="Model\DB_Model.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
+      <DependentUpon>DB_Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Folders.cs">
+      <DependentUpon>DB_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Images.cs">
+      <DependentUpon>DB_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Tags.cs">
+      <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Settings\UserSettings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -118,7 +124,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ImageModel.cs" />
+    <Compile Include="Model\DataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -136,12 +142,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="Model\Model1.edmx">
+    <EntityDeploy Include="Model\DB_Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>DB_Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Model\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <None Include="Model\DB_Model.edmx.diagram">
+      <DependentUpon>DB_Model.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -160,17 +166,19 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Model\Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Model\Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
-    </Content>
     <Resource Include="Picture\MenuTabBackground.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model\DB_Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DB_Model.edmx</DependentUpon>
+      <LastGenOutput>DB_Model.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\DB_Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DB_Model.edmx</DependentUpon>
+      <LastGenOutput>DB_Model.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PhotoManagerDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Folders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="MetaDataPicture" Type="image" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="ParentFolder" Type="int" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MetaDataPicture" Type="image" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="FolderId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PhotoManagerDB.dbo.ImageWithTags' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ImageWithTags">
+          <Key>
+            <PropertyRef Name="ImageId" />
+            <PropertyRef Name="TagName" />
+          </Key>
+          <Property Name="ImageId" Type="int" Nullable="false" />
+          <Property Name="TagName" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="TagName" />
+          </Key>
+          <Property Name="TagName" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Folders_Folders">
+          <End Role="Folders" Type="Self.Folders" Multiplicity="0..1" />
+          <End Role="Folders1" Type="Self.Folders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Folders1">
+              <PropertyRef Name="ParentFolder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Images_Folders">
+          <End Role="Folders" Type="Self.Folders" Multiplicity="1" />
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="FolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImageWithTags_Images">
+          <End Role="Images" Type="Self.Images" Multiplicity="1" />
+          <End Role="ImageWithTags" Type="Self.ImageWithTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Images">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ImageWithTags">
+              <PropertyRef Name="ImageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ImageWithTags_Tags">
+          <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
+          <End Role="ImageWithTags" Type="Self.ImageWithTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tags">
+              <PropertyRef Name="TagName" />
+            </Principal>
+            <Dependent Role="ImageWithTags">
+              <PropertyRef Name="TagName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PhotoManagerDBModelStoreContainer">
+          <EntitySet Name="Folders" EntityType="Self.Folders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ImageWithTags" EntityType="Self.ImageWithTags" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ImageWithTags].[ImageId] AS [ImageId], 
+    [ImageWithTags].[TagName] AS [TagName]
+    FROM [dbo].[ImageWithTags] AS [ImageWithTags]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Folders_Folders" Association="Self.FK_Folders_Folders">
+            <End Role="Folders" EntitySet="Folders" />
+            <End Role="Folders1" EntitySet="Folders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Images_Folders" Association="Self.FK_Images_Folders">
+            <End Role="Folders" EntitySet="Folders" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImageWithTags_Images" Association="Self.FK_ImageWithTags_Images">
+            <End Role="Images" EntitySet="Images" />
+            <End Role="ImageWithTags" EntitySet="ImageWithTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ImageWithTags_Tags" Association="Self.FK_ImageWithTags_Tags">
+            <End Role="Tags" EntitySet="Tags" />
+            <End Role="ImageWithTags" EntitySet="ImageWithTags" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PhotoManagerDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Folders">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MetaDataPicture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ParentFolder" Type="Int32" />
+          <NavigationProperty Name="Folders1" Relationship="Self.FK_Folders_Folders" FromRole="Folders" ToRole="Folders1" />
+          <NavigationProperty Name="Folders2" Relationship="Self.FK_Folders_Folders" FromRole="Folders1" ToRole="Folders" />
+          <NavigationProperty Name="Images" Relationship="Self.FK_Images_Folders" FromRole="Folders" ToRole="Images" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MetaDataPicture" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FolderId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Folders" Relationship="Self.FK_Images_Folders" FromRole="Images" ToRole="Folders" />
+          <NavigationProperty Name="Tags" Relationship="Self.ImageWithTags" FromRole="Images" ToRole="Tags" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="TagName" />
+          </Key>
+          <Property Name="TagName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Images" Relationship="Self.ImageWithTags" FromRole="Tags" ToRole="Images" />
+        </EntityType>
+        <Association Name="FK_Folders_Folders">
+          <End Role="Folders" Type="Self.Folders" Multiplicity="0..1" />
+          <End Role="Folders1" Type="Self.Folders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Folders1">
+              <PropertyRef Name="ParentFolder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Images_Folders">
+          <End Role="Folders" Type="Self.Folders" Multiplicity="1" />
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folders">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="FolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ImageWithTags">
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <End Role="Tags" Type="Self.Tags" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="PhotoManagerDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Folders" EntityType="Self.Folders" />
+          <EntitySet Name="Images" EntityType="Self.Images" />
+          <EntitySet Name="Tags" EntityType="Self.Tags" />
+          <AssociationSet Name="FK_Folders_Folders" Association="Self.FK_Folders_Folders">
+            <End Role="Folders" EntitySet="Folders" />
+            <End Role="Folders1" EntitySet="Folders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Images_Folders" Association="Self.FK_Images_Folders">
+            <End Role="Folders" EntitySet="Folders" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="ImageWithTags" Association="Self.ImageWithTags">
+            <End Role="Images" EntitySet="Images" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PhotoManagerDBModelStoreContainer" CdmEntityContainer="PhotoManagerDBEntities">
+          <EntitySetMapping Name="Folders">
+            <EntityTypeMapping TypeName="PhotoManagerDBModel.Folders">
+              <MappingFragment StoreEntitySet="Folders">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MetaDataPicture" ColumnName="MetaDataPicture" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ParentFolder" ColumnName="ParentFolder" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="PhotoManagerDBModel.Images">
+              <MappingFragment StoreEntitySet="Images">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MetaDataPicture" ColumnName="MetaDataPicture" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FolderId" ColumnName="FolderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="PhotoManagerDBModel.Tags">
+              <MappingFragment StoreEntitySet="Tags">
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ImageWithTags" TypeName="PhotoManagerDBModel.ImageWithTags" StoreEntitySet="ImageWithTags">
+            <EndProperty Name="Images">
+              <ScalarProperty Name="Id" ColumnName="ImageId" />
+            </EndProperty>
+            <EndProperty Name="Tags">
+              <ScalarProperty Name="TagName" ColumnName="TagName" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

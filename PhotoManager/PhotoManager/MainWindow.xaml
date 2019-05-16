@@ -9,7 +9,8 @@
         xmlns:CarouselControl="clr-namespace:PhotoManager.CarouselControl"
         mc:Ignorable="d"
         Title="PhotoManager" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen" 
-        WindowState="Maximized" x:Name="Window" WindowStyle="None" MouseDown="Window_MouseDown">
+        x:Name="Window" WindowStyle="None" MouseDown="Window_MouseDown" Loaded="Window_Loaded"
+        WindowChrome.IsHitTestVisibleInChrome="True">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
             <GradientStop Color="WhiteSmoke" Offset="0"/>
@@ -19,7 +20,7 @@
     </Window.Background>
     <Window.Resources>
         <ResourceDictionary>
-            <Storyboard x:Key="CloseMenu" x:Name="CloseMenu">
+            <Storyboard x:Key="CloseMenu">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
                                            (TransformGroup.Children)[3].(TranslateTransform.X)" 
                                            Storyboard.TargetName="GridMenu">
@@ -48,6 +49,54 @@
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" 
                                            Storyboard.TargetName="GridEmptyMenu">
                     <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.1"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="CloseMenuOptionFolder">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
+                                           (TransformGroup.Children)[3].(TranslateTransform.X)" 
+                                           Storyboard.TargetName="FolderMiniMenu">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="OpenMenuOptionFolder">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
+                                           (TransformGroup.Children)[3].(TranslateTransform.X)" 
+                                           Storyboard.TargetName="FolderMiniMenu">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="300"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="CloseMenuOptionPhoto">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
+                                           (TransformGroup.Children)[3].(TranslateTransform.X)" 
+                                           Storyboard.TargetName="PhotoMiniMenu">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="OpenMenuOptionPhoto">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
+                                           (TransformGroup.Children)[3].(TranslateTransform.X)" 
+                                           Storyboard.TargetName="PhotoMiniMenu">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="300"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="CloseMenuOptionTag">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
+                                           (TransformGroup.Children)[3].(TranslateTransform.X)" 
+                                           Storyboard.TargetName="TagMiniMenu">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <Storyboard x:Key="OpenMenuOptionTag">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).
+                                           (TransformGroup.Children)[3].(TranslateTransform.X)" 
+                                           Storyboard.TargetName="TagMiniMenu">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="300"/>
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
 
@@ -150,6 +199,45 @@
             <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
         </EventTrigger>
 
+        <EventTrigger RoutedEvent="Grid.MouseLeftButtonDown" SourceName="BaseMainMenuPanel">
+            <BeginStoryboard x:Name="CloseMenuOptionFolder_BeginStoryboard" 
+                             Storyboard="{StaticResource CloseMenuOptionFolder}"/>
+            <BeginStoryboard x:Name="CloseMenuOptionPhoto_BeginStoryboard" 
+                             Storyboard="{StaticResource CloseMenuOptionPhoto}"/>
+            <BeginStoryboard x:Name="CloseMenuOptionTag_BeginStoryboard" 
+                             Storyboard="{StaticResource CloseMenuOptionTag}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ListViewItem.MouseRightButtonDown" SourceName="ListViewItemFolder">
+            <BeginStoryboard x:Name="OpenMenuOptionFolder_BeginStoryboard" 
+                             Storyboard="{StaticResource OpenMenuOptionFolder}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ListViewItem.PreviewMouseRightButtonDown" SourceName="ListViewItemFolder">
+            <BeginStoryboard x:Name="OpenMenuOptionFolder_BeginStoryboard1" 
+                             Storyboard="{StaticResource OpenMenuOptionFolder}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ListViewItem.MouseRightButtonDown" SourceName="ListViewItemPhoto">
+            <BeginStoryboard x:Name="OpenMenuOptionPhoto_BeginStoryboard" 
+                             Storyboard="{StaticResource OpenMenuOptionPhoto}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ListViewItem.PreviewMouseRightButtonDown" SourceName="ListViewItemPhoto">
+            <BeginStoryboard x:Name="OpenMenuOptionPhoto_BeginStoryboard1" 
+                             Storyboard="{StaticResource OpenMenuOptionPhoto}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ListViewItem.MouseRightButtonDown" SourceName="ListViewItemTag">
+            <BeginStoryboard x:Name="OpenMenuOptionTag_BeginStoryboard" 
+                             Storyboard="{StaticResource OpenMenuOptionTag}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="ListViewItem.PreviewMouseRightButtonDown" SourceName="ListViewItemTag">
+            <BeginStoryboard x:Name="OpenMenuOptionTag_BeginStoryboard1" 
+                             Storyboard="{StaticResource OpenMenuOptionTag}"/>
+        </EventTrigger>
+
     </Window.Triggers>
 
     <Grid>
@@ -215,7 +303,7 @@
                     <Label Grid.Row="0" Content="{Binding SelectedFolderOrImage.Name}" FontSize="32" 
                            Foreground="White" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
 
-                    <TextBlock Grid.Row="2" Text="{Binding SelectedFolderOrImage.Text}" FontSize="18" 
+                    <TextBlock Grid.Row="2" Text="{Binding SelectedFolderOrImage.Description}" FontSize="16" 
                                Foreground="White" VerticalAlignment="Top" Margin="5" HorizontalAlignment="Center"/>
                 </Grid>
             </Grid>
@@ -291,13 +379,17 @@
         </Grid>
 
         <Grid x:Name="GridMenu" Width="{Binding ElementName=Window, Path=ActualWidth}"
-              HorizontalAlignment="Left" Margin="-300 0 0 0" 
-              RenderTransformOrigin="0.5,0.5">
+              HorizontalAlignment="Left" Margin="-300 0 0 0" RenderTransformOrigin="0.5,0.5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
             <Grid.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -306,65 +398,191 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
-
-            <Grid Background="White">
-                <StackPanel>
-                    <Image Source="C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\Picture\MenuTabBackground.jpg" 
+            
+            <Image Source="C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\Picture\MenuTabBackground.jpg" 
                                    Stretch="UniformToFill" Height="120"/>
-                    <ListView Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" 
-                          FontSize="18">
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="CreateNewFolder" Style="{StaticResource SizeOfMaterialIcon}" 
-                                                         Foreground="Green"/>
-                                <TextBlock Text="Add new folder" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="InsertPhoto" Style="{StaticResource SizeOfMaterialIcon}" 
-                                                         Foreground="#FFF08033"/>
-                                <TextBlock Text="Add photo" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Tag" Style="{StaticResource SizeOfMaterialIcon}" 
-                                                         Foreground="#FFE6A701"/>
-                                <TextBlock Text="Add tag" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0" MouseDoubleClick="ListViewItem_MouseDoubleClickAsync">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"
-                                                         Foreground="Gray"/>
-                                <TextBlock Text="Edit photo" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Settings" Style="{StaticResource SizeOfMaterialIcon}"
-                                                         Foreground="#FF0069C1"/>
-                                <TextBlock Text="Settings" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="WindowClose" Style="{StaticResource SizeOfMaterialIcon}"
-                                                         Foreground="#FFD41515"/>
-                                <TextBlock Text="Close app" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                    </ListView>
-                </StackPanel>
 
-                <Button x:Name="ButtonClose" HorizontalAlignment="Right" VerticalAlignment="Top" 
+            <Button x:Name="ButtonClose" HorizontalAlignment="Right" VerticalAlignment="Top" 
                     Style="{StaticResource StyleNoneButton}" Background="White" Width="30" Height="30" Padding="0">
-                    <materialDesign:PackIcon Kind="Close" Width="20" Height="20"/>
-                </Button>
+                <materialDesign:PackIcon Kind="Close" Width="20" Height="20"/>
+            </Button>
+
+            <Grid Background="White" Grid.Row="1" x:Name="BaseMainMenuPanel" MouseLeftButtonDown="BaseMainMenuPanel_MouseLeftButtonDown"
+                  PreviewMouseLeftButtonDown="BaseMainMenuPanel_MouseLeftButtonDown">
+                <Grid x:Name="MainMenuPanel">
+                    <StackPanel>
+                        <ListView Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18">
+                            <ListViewItem Height="45" Padding="0" x:Name="ListViewItemFolder"
+                                          MouseRightButtonDown="ListViewItemFolder_MouseRightButtonDown"
+                                          PreviewMouseRightButtonDown="ListViewItemFolder_MouseRightButtonDown">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="CreateNewFolder" Style="{StaticResource SizeOfMaterialIcon}" 
+                                                         Foreground="Green"/>
+                                    <TextBlock Text="Folder" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0" x:Name="ListViewItemPhoto"
+                                          MouseRightButtonDown="ListViewItemPhoto_MouseRightButtonDown"
+                                          PreviewMouseRightButtonDown="ListViewItemPhoto_MouseRightButtonDown">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="InsertPhoto" Style="{StaticResource SizeOfMaterialIcon}" 
+                                                         Foreground="#FFF08033"/>
+                                    <TextBlock Text="Photo" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0" x:Name="ListViewItemTag" 
+                                          MouseRightButtonDown="ListViewItemTag_MouseRightButtonDown"
+                                          PreviewMouseRightButtonDown="ListViewItemTag_MouseRightButtonDown">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Tag" Style="{StaticResource SizeOfMaterialIcon}" 
+                                                         Foreground="#FFE6A701"/>
+                                    <TextBlock Text="Tag" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0" MouseDoubleClick="ListViewItem_MouseDoubleClickAsync">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Gray"/>
+                                    <TextBlock Text="Edit photo" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Settings" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="#FF0069C1"/>
+                                    <TextBlock Text="Settings" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="WindowClose" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="#FFD41515"/>
+                                    <TextBlock Text="Close app" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+
+                <Grid x:Name="FolderMiniMenu" HorizontalAlignment="Left" Margin="-300 0 0 0"
+                      RenderTransformOrigin="0.5,0.5" Width="300" Visibility="Collapsed">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+
+                    <StackPanel>
+                        <ListView Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18">
+                            <ListViewItem Height="45" Padding="0" x:Name="AddFolder" 
+                                          MouseDoubleClick="AddFolder_MouseDoubleClick">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Add" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Green"/>
+                                    <TextBlock Text="Add" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0" x:Name="EditFolder"
+                                          MouseDoubleClick="EditFolder_MouseDoubleClick">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Gray"/>
+                                    <TextBlock Text="Edit" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0" x:Name="DeleteFolder"
+                                          MouseDoubleClick="DeleteFolder_MouseDoubleClick">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Delete" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="#FF6E0707"/>
+                                    <TextBlock Text="Delete" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+
+                <Grid x:Name="PhotoMiniMenu" HorizontalAlignment="Left" Margin="-300 0 0 0"
+                      RenderTransformOrigin="0.5,0.5" Width="300" Visibility="Collapsed">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+
+                    <StackPanel>
+                        <ListView Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18">
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Add" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Green"/>
+                                    <TextBlock Text="Add" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Gray"/>
+                                    <TextBlock Text="Edit" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Delete" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="#FF6E0707"/>
+                                    <TextBlock Text="Delete" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+
+                <Grid x:Name="TagMiniMenu" HorizontalAlignment="Left" Margin="-300 0 0 0"
+                      RenderTransformOrigin="0.5,0.5" Width="300" Visibility="Collapsed">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+
+                    <StackPanel>
+                        <ListView Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18">
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Add" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Green"/>
+                                    <TextBlock Text="Add" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="Gray"/>
+                                    <TextBlock Text="Edit" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="10 0">
+                                    <materialDesign:PackIcon Kind="Delete" Style="{StaticResource SizeOfMaterialIcon}"
+                                                         Foreground="#FF6E0707"/>
+                                    <TextBlock Text="Delete" Margin="10"/>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
             </Grid>
 
-            <Grid x:Name="GridEmptyMenu" Grid.Column="1" Background="LightGray" Opacity="0" 
+            <Grid x:Name="GridEmptyMenu" Grid.Column="1" Grid.RowSpan="2" Background="LightGray" Opacity="0" 
                   Visibility="Hidden" MouseLeftButtonDown="GridEmptyMenu_MouseLeftButtonDown" 
                   PreviewMouseLeftButtonDown="GridEmptyMenu_MouseLeftButtonDown"/>
         </Grid>

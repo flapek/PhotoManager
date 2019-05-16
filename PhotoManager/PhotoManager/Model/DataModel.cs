@@ -2,11 +2,11 @@
 
 namespace PhotoManager.Model
 {
-    public class ImageModel
+    public class DataModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string ShortName { get; set; }
         public BitmapImage ImageSource { get; set; }
-        public string Text { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -8,26 +8,17 @@ namespace PhotoManager.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel(ImageEntities entities)
-        {
-            IQueryable<ImageInfo> data = entities.ImageInfo;
-            ObservableCollection<ImageModel> imageData = new ObservableCollection<ImageModel>();
-            foreach (ImageInfo imageInfo in data)
+        public MainViewModel(ObservableCollection<DataModel> imageData)
+        {            
+            if (imageData.Count != 0)
             {
-                imageData.Add(new ImageModel()
-                {
-                    Name = imageInfo.Name,
-                    ShortName = imageInfo.ShortName,
-                    ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(imageInfo.Image),
-                    Text = imageInfo.Text
-                });
+                FolderOrImageDAB = imageData;
+                SelectedFolderOrImage = FolderOrImageDAB[0];
             }
-            FolderOrImageDAB = imageData;
-            SelectedFolderOrImage = FolderOrImageDAB[0];
         }
 
-        private ObservableCollection<ImageModel> _folderOrImageDAB;
-        public ObservableCollection<ImageModel> FolderOrImageDAB
+        private ObservableCollection<DataModel> _folderOrImageDAB;
+        public ObservableCollection<DataModel> FolderOrImageDAB
         {
             get => _folderOrImageDAB;
             set
@@ -37,8 +28,8 @@ namespace PhotoManager.ViewModel
             }
         }
 
-        private ImageModel _selectedFolderOrImage;
-        public ImageModel SelectedFolderOrImage
+        private DataModel _selectedFolderOrImage;
+        public DataModel SelectedFolderOrImage
         {
             get => _selectedFolderOrImage;
             set

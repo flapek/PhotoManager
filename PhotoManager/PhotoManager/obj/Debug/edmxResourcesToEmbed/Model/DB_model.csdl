@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhotoManagerDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Folders">
+    <Key>
+      <PropertyRef Name="FolderId" />
+    </Key>
+    <Property Name="FolderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FolderName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MetaDataImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ParentFolder" Type="Int32" />
+    <NavigationProperty Name="Folders1" Relationship="Self.FK_Folders_Folders" FromRole="Folders" ToRole="Folders1" />
+    <NavigationProperty Name="Folders2" Relationship="Self.FK_Folders_Folders" FromRole="Folders1" ToRole="Folders" />
+    <NavigationProperty Name="Images" Relationship="Self.FK_Images_Folders" FromRole="Folders" ToRole="Images" />
+  </EntityType>
+  <EntityType Name="Images">
+    <Key>
+      <PropertyRef Name="ImageId" />
+    </Key>
+    <Property Name="ImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ImageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MetaDataImage" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="FolderId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Folders" Relationship="Self.FK_Images_Folders" FromRole="Images" ToRole="Folders" />
+    <NavigationProperty Name="Tags" Relationship="Self.ImageWithTags" FromRole="Images" ToRole="Tags" />
+  </EntityType>
+  <EntityType Name="Tags">
+    <Key>
+      <PropertyRef Name="TagName" />
+    </Key>
+    <Property Name="TagName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Images" Relationship="Self.ImageWithTags" FromRole="Tags" ToRole="Images" />
+  </EntityType>
+  <Association Name="FK_Folders_Folders">
+    <End Role="Folders" Type="Self.Folders" Multiplicity="0..1" />
+    <End Role="Folders1" Type="Self.Folders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Folders">
+        <PropertyRef Name="FolderId" />
+      </Principal>
+      <Dependent Role="Folders1">
+        <PropertyRef Name="ParentFolder" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Images_Folders">
+    <End Role="Folders" Type="Self.Folders" Multiplicity="1" />
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Folders">
+        <PropertyRef Name="FolderId" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="FolderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ImageWithTags">
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <End Role="Tags" Type="Self.Tags" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="PhotoManagerDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Folders" EntityType="Self.Folders" />
+    <EntitySet Name="Images" EntityType="Self.Images" />
+    <EntitySet Name="Tags" EntityType="Self.Tags" />
+    <AssociationSet Name="FK_Folders_Folders" Association="Self.FK_Folders_Folders">
+      <End Role="Folders" EntitySet="Folders" />
+      <End Role="Folders1" EntitySet="Folders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Images_Folders" Association="Self.FK_Images_Folders">
+      <End Role="Folders" EntitySet="Folders" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="ImageWithTags" Association="Self.ImageWithTags">
+      <End Role="Images" EntitySet="Images" />
+      <End Role="Tags" EntitySet="Tags" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

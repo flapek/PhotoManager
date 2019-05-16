@@ -12,12 +12,17 @@ namespace PhotoManager.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class ImageInfo
+    public partial class Tags
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string ShortName { get; set; }
-        public byte[] Image { get; set; }
-        public string Text { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Tags()
+        {
+            this.Images = new HashSet<Images>();
+        }
+    
+        public string TagName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Images> Images { get; set; }
     }
 }
