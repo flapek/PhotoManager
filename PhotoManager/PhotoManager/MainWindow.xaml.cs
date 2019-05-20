@@ -2,6 +2,7 @@
 using PhotoManager.ViewModel;
 using PhotoManager.Workers;
 using PhotoManager.Workers.Open;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
@@ -16,12 +17,16 @@ namespace PhotoManager
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
         private ObservableCollection<DataModel> imageData = new ObservableCollection<DataModel>();
+        private string splahImage = "Picture\\SplashScreen.jpg";
 
         public MainWindow()
         {
-            InitializeComponent();
+            SplashScreen splashScreen = new SplashScreen(splahImage);
+            splashScreen.Show(true);
+            Thread.Sleep(2500);
+            splashScreen.Close(TimeSpan.FromSeconds(5));
 
-            
+            InitializeComponent();
 
             CarouselFolderOrImage.SelectionChanged += CarouselFolderOrImage_SelectionChanged;
         }
@@ -43,7 +48,7 @@ namespace PhotoManager
             viewModel.SelectedFolderOrImage = selectedElement.DataContext as DataModel;
         }
 
-        private void ButtonLeftArrow_Click(object sender, RoutedEventArgs e)
+        private void ButtonPreviousPhotoOrFolder_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel viewModel = DataContext as MainViewModel;
             if (viewModel == null)
@@ -62,7 +67,7 @@ namespace PhotoManager
             }
         }
 
-        private void ButtonRightArrow_Click(object sender, RoutedEventArgs e)
+        private void ButtonNextPhotoOrFolder_Click(object sender, RoutedEventArgs e)
         {
             MainViewModel viewModel = DataContext as MainViewModel;
             if (viewModel == null)
@@ -136,6 +141,12 @@ namespace PhotoManager
 
         #region Menu Tab Control
 
+        /// <summary>
+        /// Show menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         private void ButtonOpenMenuTab_Click(object sender, RoutedEventArgs e) => GridEmptyMenu.Visibility = Visibility.Visible;
 
         private void GridEmptyMenu_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => GridEmptyMenu.Visibility = Visibility.Collapsed;
@@ -143,25 +154,37 @@ namespace PhotoManager
 
         #region ListViewItem in Menu click
 
-        private async void ListViewItem_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e) => await OpenEditingProgram.Open();        // obsłużyć dodawanie zdjęcia
+        /// <summary>
+        /// Interact with menu option
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
-        private void ListViewItemFolder_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void ListViewItemFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MainMenuPanel.Visibility = Visibility.Collapsed;
-            FolderMiniMenu.Visibility = Visibility.Visible;
+            FolderWindow folderWindow = new FolderWindow();
+            folderWindow.ShowDialog();
         }
 
-        private void ListViewItemTag_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void ListViewItemPhoto_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MainMenuPanel.Visibility = Visibility.Collapsed;
-            TagMiniMenu.Visibility = Visibility.Visible;
+
         }
 
-        private void ListViewItemPhoto_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void ListViewItemTag_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MainMenuPanel.Visibility = Visibility.Collapsed;
-            PhotoMiniMenu.Visibility = Visibility.Visible;
+
         }
+
+        private async void ListViewItemEditPhoto_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e) => await OpenEditingProgram.Open();        // obsłużyć dodawanie zdjęcia
+
+        private void ListViewItemSettings_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog();         
+        }
+
+        private void ListViewItemCloseApp_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
 
         private void BaseMainMenuPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MainMenuPanel.Visibility = Visibility.Visible;
 
@@ -190,10 +213,9 @@ namespace PhotoManager
 
         }
 
-        #endregion
 
         #endregion
 
-
+        #endregion
     }
 }

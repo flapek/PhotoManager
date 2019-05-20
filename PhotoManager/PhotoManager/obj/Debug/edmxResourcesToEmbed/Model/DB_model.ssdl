@@ -2,21 +2,21 @@
 <Schema Namespace="PhotoManagerDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Folders">
     <Key>
-      <PropertyRef Name="FolderId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="FolderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FolderName" Type="nvarchar" MaxLength="60" Nullable="false" />
-    <Property Name="MetaDataImage" Type="image" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="60" Nullable="false" />
+    <Property Name="MetaDataPicture" Type="image" />
     <Property Name="Description" Type="nvarchar" MaxLength="200" />
     <Property Name="ParentFolder" Type="int" />
   </EntityType>
   <EntityType Name="Images">
     <Key>
-      <PropertyRef Name="ImageId" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="ImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ImageName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="MetaDataImage" Type="image" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MetaDataPicture" Type="image" Nullable="false" />
     <Property Name="Description" Type="nvarchar" MaxLength="200" />
     <Property Name="FolderId" Type="int" Nullable="false" />
   </EntityType>
@@ -41,7 +41,7 @@ warning 6002: The table/view 'PhotoManagerDB.dbo.ImageWithTags' does not have a 
     <End Role="Folders1" Type="Self.Folders" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Folders">
-        <PropertyRef Name="FolderId" />
+        <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Folders1">
         <PropertyRef Name="ParentFolder" />
@@ -53,7 +53,7 @@ warning 6002: The table/view 'PhotoManagerDB.dbo.ImageWithTags' does not have a 
     <End Role="Images" Type="Self.Images" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Folders">
-        <PropertyRef Name="FolderId" />
+        <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Images">
         <PropertyRef Name="FolderId" />
@@ -65,7 +65,7 @@ warning 6002: The table/view 'PhotoManagerDB.dbo.ImageWithTags' does not have a 
     <End Role="ImageWithTags" Type="Self.ImageWithTags" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Images">
-        <PropertyRef Name="ImageId" />
+        <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="ImageWithTags">
         <PropertyRef Name="ImageId" />

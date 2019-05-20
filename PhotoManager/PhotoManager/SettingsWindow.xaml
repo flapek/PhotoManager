@@ -1,0 +1,181 @@
+﻿<Window x:Class="PhotoManager.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoManager"
+        xmlns:converters="clr-namespace:PhotoManager.Workers"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Settings" Height="550" Width="900" MaxHeight="720" MaxWidth="1080" 
+        WindowStartupLocation="CenterScreen" WindowStyle="None" MouseDown="Window_MouseDown"
+        Name="Window">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+            <GradientStop Color="WhiteSmoke" Offset="0"/>
+            <GradientStop Color="LightBlue" Offset="0.3"/>
+            <GradientStop Color="SteelBlue" Offset="1.0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:WidthConverter x:Key="WidthConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Name="TopPanel">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid Background="White" Opacity="0.2"/>
+                <Label Style="{StaticResource BaseStyleLabel}"
+                       Content="{Binding ElementName=Window, Path=Title}"/>
+            </Grid>
+            
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid Grid.ColumnSpan="2" Grid.RowSpan="2" Background="White" Opacity="0.2"/>
+
+                <Button Style="{StaticResource StyleNoneButton}" Name="ButtonMinimizeWindow" 
+                            MouseLeftButtonDown="ButtonMinimizeWindow_Click" 
+                        PreviewMouseLeftButtonDown="ButtonMinimizeWindow_Click">
+                    <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
+                </Button>
+
+                <Button Style="{StaticResource StyleNoneButton}" Name="ButtonCloseWindow" Grid.Column="1"
+                            MouseLeftButtonDown="ButtonCloseWindow_Click" 
+                        PreviewMouseLeftButtonDown="ButtonCloseWindow_Click">
+                    <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="300" MinWidth="100"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Name="ChosePanel">
+                <ListView Style="{StaticResource SettingsPanelStyle}">
+                    <ListView.Background>
+                        <ImageBrush ImageSource="Picture/SettingsPanelBackground.png" Stretch="UniformToFill"/>
+                    </ListView.Background>
+                    <ListViewItem Height="45" Padding="0" x:Name="ListViewItemChooseProgram"
+                                  MouseDoubleClick="ListViewItemChooseProgram_MouseDoubleClick">
+                        <StackPanel Style="{StaticResource StackPanelHorizontal}">
+                            <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"/>
+                            <TextBlock Text="Program" Style="{StaticResource MenuOptionText}"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0" MouseDoubleClick="Test_MouseDoubleClick"
+                                  x:Name="Test">
+                        <StackPanel Style="{StaticResource StackPanelHorizontal}">
+                            <materialDesign:PackIcon Kind="Edit" Style="{StaticResource SizeOfMaterialIcon}"/>
+                            <TextBlock Text="Test" Style="{StaticResource MenuOptionText}"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </Grid>
+
+            <GridSplitter Grid.Column="1" Style="{StaticResource StyleGridSpliter}"/>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="{Binding ElementName= Window, Path=Width, Converter={StaticResource 
+                        WidthConverter}, ConverterParameter=7}"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="OptionPanelChooseProgram" Visibility="Visible">
+                    <Grid Grid.Row="0" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="2.5*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Style="{StaticResource OptionNameStyle}" 
+                                       Grid.Row="0">Editing program source</TextBlock>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="{Binding ElementName= Window, Path=Width, 
+                                            Converter={StaticResource WidthConverter}, ConverterParameter=12}"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="SourcePathToEditingProgramTextBox" Margin="10" Grid.Column="0" 
+                                         TextChanged="SourcePathToEditingProgramTextBox_TextChanged" 
+                                         VerticalContentAlignment="Center" FontSize="20"/>
+                                <Button x:Name="SearchProgramPathButton" Style="{StaticResource SettingsButton}" 
+                                        Content="Search" Grid.Column="1" Click="SearchProgramPathButton_Click"/>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Style="{StaticResource SettingsHintPanel}">
+                            <TextBlock x:Name="HintOpenProgramTextBlock" TextWrapping="WrapWithOverflow"
+                                       Padding="5" FontSize="14"/>
+                        </Grid>
+
+                    </Grid>
+                </Grid>
+
+                <Grid x:Name="TestPanel" Visibility="Collapsed">
+                    
+                </Grid>
+
+                <Grid Grid.Row="1" Name="BottomButtonPanel">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Button x:Name="SaveOptionButton" Content="Save" 
+                                Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}"
+                                Click="SaveOptionButton_Click"/>
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <Button x:Name="DefaultOptionButton" Content="Default" Style="{StaticResource SettingsButton}"
+                                Click="DefaultOptionButton_Click"/>
+                    </Grid>
+
+                    <Grid Grid.Column="2">
+                        <Button x:Name="OkOptionButton" Content="Ok" Style="{StaticResource SettingsButton}"/>
+                    </Grid>
+
+                    <Grid Grid.Column="3">
+                        <Button x:Name="CancelOptionButton" Content="Cancel" Style="{StaticResource SettingsButton}"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

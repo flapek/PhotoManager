@@ -4,9 +4,9 @@
     <EntitySetMapping Name="Folders">
       <EntityTypeMapping TypeName="PhotoManagerDBModel.Folders">
         <MappingFragment StoreEntitySet="Folders">
-          <ScalarProperty Name="FolderId" ColumnName="FolderId" />
-          <ScalarProperty Name="FolderName" ColumnName="FolderName" />
-          <ScalarProperty Name="MetaDataImage" ColumnName="MetaDataImage" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MetaDataPicture" ColumnName="MetaDataPicture" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="ParentFolder" ColumnName="ParentFolder" />
         </MappingFragment>
@@ -15,9 +15,9 @@
     <EntitySetMapping Name="Images">
       <EntityTypeMapping TypeName="PhotoManagerDBModel.Images">
         <MappingFragment StoreEntitySet="Images">
-          <ScalarProperty Name="ImageId" ColumnName="ImageId" />
-          <ScalarProperty Name="ImageName" ColumnName="ImageName" />
-          <ScalarProperty Name="MetaDataImage" ColumnName="MetaDataImage" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MetaDataPicture" ColumnName="MetaDataPicture" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="FolderId" ColumnName="FolderId" />
         </MappingFragment>
@@ -32,7 +32,7 @@
     </EntitySetMapping>
     <AssociationSetMapping Name="ImageWithTags" TypeName="PhotoManagerDBModel.ImageWithTags" StoreEntitySet="ImageWithTags">
       <EndProperty Name="Images">
-        <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+        <ScalarProperty Name="Id" ColumnName="ImageId" />
       </EndProperty>
       <EndProperty Name="Tags">
         <ScalarProperty Name="TagName" ColumnName="TagName" />
