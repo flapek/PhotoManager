@@ -1,15 +1,11 @@
 ﻿using PhotoManager.Model;
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PhotoManager
 {
-    /// <summary>
-    /// Interaction logic for FolderWindow.xaml
-    /// </summary>
     public partial class FolderWindow : Window
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
@@ -35,7 +31,7 @@ namespace PhotoManager
 
         #region Window loaded
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             CreateTreeView();
         }
@@ -44,10 +40,36 @@ namespace PhotoManager
 
         #region Button control
 
+        private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            FolderView.Items.Clear();
+            CreateTreeView();
+        }
+
         private void ButtonAddFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Window_AddFolder windowAddFolder = new Window_AddFolder();
             windowAddFolder.ShowDialog();
+        }
+        
+        //usuwanie folderu nie działa 
+        private void ButtonDeleteFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem tvi = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            int folderId = Convert.ToInt32(tvi.Tag.ToString());
+
+            if (MessageBox.Show(Constants.MessageBoxFolderClose, Constants.CaptionNameWarning,
+                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                Folders folders = new Folders
+                {
+                    Id = folderId
+                };
+
+                managerDBEntities.Folders.Attach(folders);
+                managerDBEntities.Folders.Remove(folders);
+                FolderView.Items.Remove(FolderView.SelectedItem);
+            }
         }
 
         private void ButtonCancelChanges_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
@@ -73,6 +95,8 @@ namespace PhotoManager
                     item.Expanded += Item_Expanded;
 
                     FolderView.Items.Add(item);
+
+                    item.MouseDoubleClick += Item_MouseDoubleClick;
                 }
             }
         }
@@ -107,5 +131,16 @@ namespace PhotoManager
         }
 
         #endregion
+
+        #region TreeView interaction
+
+        private void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        #endregion
+
+
     }
 }
