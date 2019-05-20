@@ -118,6 +118,10 @@ namespace PhotoManager
                 DragMove();
         }
 
+        #endregion
+
+        #region Window Loaded
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;

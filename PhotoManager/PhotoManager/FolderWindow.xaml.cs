@@ -1,5 +1,7 @@
 ﻿using PhotoManager.Model;
 using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +11,7 @@ namespace PhotoManager
     public partial class FolderWindow : Window
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
+        private bool isDataDirty = false;
 
         public FolderWindow()
         {
@@ -25,7 +28,18 @@ namespace PhotoManager
 
         private void ButtonMinimizeWindow_Click(object sender, MouseButtonEventArgs e) => WindowState = WindowState.Minimized;
 
-        private void ButtonCloseWindow_Click(object sender, MouseButtonEventArgs e) => Close();
+        private void ButtonCloseWindow_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (isDataDirty)
+            {
+                if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning, 
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    Close();
+                }
+            }
+            else Close();
+        }
 
         #endregion
 
@@ -51,12 +65,12 @@ namespace PhotoManager
             Window_AddFolder windowAddFolder = new Window_AddFolder();
             windowAddFolder.ShowDialog();
         }
-        
+
         //usuwanie folderu nie działa 
         private void ButtonDeleteFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            TreeViewItem tvi = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
-            int folderId = Convert.ToInt32(tvi.Tag.ToString());
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            int folderId = Convert.ToInt32(selectedFolder.Tag.ToString());
 
             if (MessageBox.Show(Constants.MessageBoxFolderClose, Constants.CaptionNameWarning,
                 MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
@@ -99,6 +113,15 @@ namespace PhotoManager
                     item.MouseDoubleClick += Item_MouseDoubleClick;
                 }
             }
+
+            foreach (Folders folders in managerDBEntities.Folders)
+            {
+                ComboBoxParentFolder.Items.Add(new ComboBoxItem
+                {
+                    Content = folders.Name,
+                    Tag = folders.Id.ToString()
+                });
+            }
         }
 
         private void Item_Expanded(object sender, RoutedEventArgs e)
@@ -133,14 +156,84 @@ namespace PhotoManager
         #endregion
 
         #region TreeView interaction
-
+        //dodać wyświetlnie comboboxu odpowiedniego 
         private void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //throw new NotImplementedException();
+            TreeViewItem item = (TreeViewItem)sender;
+            int folderID = Convert.ToInt32(item.Tag.ToString());
+            IQueryable<string> foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description);
+
+            TextBoxFolderName.Text = item.Header.ToString();
+            TextBoxFolderName.Tag = item.Header.ToString();
+            foreach (string text in foldersDescription)
+            {
+                RichTextBoxFolderDescription.Selection.Text = text;
+            }
         }
 
         #endregion
 
+        #region CheckBox click
 
+        private void CheckBoxCanEdit_Checked(object sender, RoutedEventArgs e)
+        {
+            TextBoxFolderName.IsEnabled = true;
+            ComboBoxParentFolder.IsEnabled = true;
+            RichTextBoxFolderDescription.IsEnabled = true;
+        }
+
+        private void CheckBoxCanEdit_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TextBoxFolderName.IsEnabled = false;
+            ComboBoxParentFolder.IsEnabled = false;
+            RichTextBoxFolderDescription.IsEnabled = false;
+        }
+
+        #endregion
+
+        #region Data change
+
+        private void RichTextBoxFolderDescription_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            int folderID = Convert.ToInt32(selectedFolder.Tag.ToString());
+            string foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description).First();
+
+            if (foldersDescription == RichTextBoxFolderDescription.Selection.Text)
+            {
+                ButtonSaveChanges.IsEnabled = false;
+                isDataDirty = false;
+            }
+            else
+            {
+                ButtonSaveChanges.IsEnabled = true;
+                isDataDirty = true;
+            }
+
+        }
+
+        private void TextBoxFolderName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            int folderID = Convert.ToInt32(selectedFolder.Tag.ToString());
+            string folderName = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Name).First();
+
+            if (folderName == TextBoxFolderName.Text)
+            {
+                ButtonSaveChanges.IsEnabled = false;
+                isDataDirty = false;
+            }
+            else
+            {
+                ButtonSaveChanges.IsEnabled = false;
+                isDataDirty = false;
+            }
+
+
+        }
+
+        //dodać obsługe sprawdzającą czy nie zmienił się comboBox
+
+        #endregion
     }
 }
