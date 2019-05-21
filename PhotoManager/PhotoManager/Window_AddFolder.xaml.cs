@@ -93,7 +93,7 @@ namespace PhotoManager
             int done = await managerDBEntities.SaveChangesAsync();
             if (done == 1)
             {
-                MessageBox.Show(Constants.MessageBoxFolderIsAdded, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Constants.MessageBoxTagIsAdded, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             TextBoxFolderName.Text = string.Empty;
@@ -106,7 +106,7 @@ namespace PhotoManager
 
         private void ButtonCancelAddingFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
 
-        #endregion  //Save Button nie zapisuje id poprawnie 
+        #endregion 
 
         #region TextBox control
 

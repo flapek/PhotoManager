@@ -71,3 +71,5 @@ C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\Lay
 C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\LayoutStyle\Dictionary_ComboBox.baml
 C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\LayoutStyle\Dictionary_RichTextBox.baml
 C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\LayoutStyle\Dictionary_CheckBox.baml
+C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\TagWindow.g.cs
+C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\TagWindow.baml

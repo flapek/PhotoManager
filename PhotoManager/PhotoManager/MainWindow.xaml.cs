@@ -172,12 +172,13 @@ namespace PhotoManager
 
         private void ListViewItemPhoto_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            
         }
 
         private void ListViewItemTag_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            TagWindow tagWindow = new TagWindow();
+            tagWindow.ShowDialog();
         }
 
         private async void ListViewItemEditPhoto_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e) => await OpenEditingProgram.Open();        // obsłużyć dodawanie zdjęcia

@@ -128,11 +128,11 @@
                         <Label FontSize="16" Margin="10" Style="{StaticResource BaseStyleLabel}" 
                                Content="Name" Grid.Row="1"/>
                         <TextBox Grid.Row="2" Style="{StaticResource BaseStyleTextBox}" x:Name="TextBoxFolderName" 
-                                 ToolTip="Enter folder name" IsEnabled="False" TextChanged="TextBoxFolderName_TextChanged"/>
+                                 ToolTip="Enter new folder name" IsEnabled="False" TextChanged="TextBoxFolderName_TextChanged"/>
                         <Label FontSize="16" Margin="10" Style="{StaticResource BaseStyleLabel}" 
                                Content="Parent Folder" Grid.Row="4"/>
                         <ComboBox Grid.Row="5" Style="{StaticResource BaseStyleComboBox}" 
-                                  x:Name="ComboBoxParentFolder" ToolTip="Choose parent folder"
+                                  x:Name="ComboBoxParentFolder" ToolTip="Choose new parent folder"
                                   IsEnabled="False"/>
                     </Grid>
 
