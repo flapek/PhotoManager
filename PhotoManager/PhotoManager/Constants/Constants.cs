@@ -17,6 +17,7 @@
         public const string MessageBoxTagIsAdded = "Tag is added";
         public const string MessageBoxFolderClose = "Do you want delete it?";
         public const string MessageBoxIncorectData = "Data name is incorect or data alredy exists!!!";
+        public const string MessageBoxTagChangeIsSaved = "Succesfully save change";
 
         #endregion
 

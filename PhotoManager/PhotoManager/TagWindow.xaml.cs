@@ -1,17 +1,8 @@
 ﻿using PhotoManager.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PhotoManager
 {
@@ -19,6 +10,9 @@ namespace PhotoManager
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
         private bool isDataDirty = false;
+
+        private string actualChoosenTag = string.Empty;
+        private bool IsTagChoosen = false;
 
         public TagWindow()
         {
@@ -35,7 +29,18 @@ namespace PhotoManager
 
         private void ButtonMinimizeWindow_Click(object sender, MouseButtonEventArgs e) => WindowState = WindowState.Minimized;
 
-        private void ButtonCloseWindow_Click(object sender, MouseButtonEventArgs e) => Close();
+        private void ButtonCloseWindow_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (isDataDirty)
+            {
+                if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning, MessageBoxButton.YesNo, 
+                    MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    Close();
+                }
+            }
+            else Close();
+        }
 
         #endregion
 
@@ -64,21 +69,44 @@ namespace PhotoManager
             }
         }
 
+        private void ButtonCancel_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+
         #endregion
 
+        //proprawić 
         #region TextBox control
 
         private void TextBoxTagName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!(TextBoxTagName.Text == string.Empty))
+            if (IsTagChoosen)
             {
-                ButtonAddTag.IsEnabled = true;
-                isDataDirty = true;
+                if (TextBoxTagName.Text == actualChoosenTag)
+                {
+                    ButtonAddTag.IsEnabled = false;
+                    ButtonDeleteTag.IsEnabled = true;
+                    isDataDirty = false;
+                }
+                else
+                {
+                    ButtonAddTag.IsEnabled = true;
+                    ButtonDeleteTag.IsEnabled = false;
+                    isDataDirty = true;
+                }
             }
             else
             {
-                ButtonAddTag.IsEnabled = false;
-                isDataDirty = false;
+                if (TextBoxTagName.Text == actualChoosenTag)
+                {
+                    ButtonAddTag.IsEnabled = false;
+                    ButtonDeleteTag.IsEnabled = false;
+                    isDataDirty = false;
+                }
+                else
+                {
+                    ButtonAddTag.IsEnabled = true;
+                    ButtonDeleteTag.IsEnabled = false;
+                    isDataDirty = true;
+                }
             }
         }
 
@@ -100,12 +128,30 @@ namespace PhotoManager
             ListBoxTag.Items.Clear();
             foreach (Tags item in managerDBEntities.Tags)
             {
-                ListBoxTag.Items.Add(new ListBoxItem
+                ListBoxItem listBoxItem = new ListBoxItem
                 {
                     Content = item.TagName,
                     Tag = item.TagName
-                });
+                };
+
+                ListBoxTag.Items.Add(listBoxItem);
+
+                listBoxItem.MouseDoubleClick += ListBoxItem_MouseDoubleClick;
             }
+        }
+
+        #endregion
+
+        #region ListBoxItem interaction
+
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ListBoxItem listBoxItem = (ListBoxItem)sender;
+
+            IsTagChoosen = true;
+
+            TextBoxTagName.Text = listBoxItem.Tag.ToString();
+            actualChoosenTag = listBoxItem.Tag.ToString();
         }
 
         #endregion

@@ -102,14 +102,11 @@
                         Content="Add tag" ToolTip="Add tag to resource" Grid.Row="5" Grid.Column="1" 
                         MouseDoubleClick="ButtonAddTag_MouseDoubleClickAsync"/>
 
-                <Button x:Name="ButtonSaveTag" Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
-                        Content="Save changes" ToolTip="Save changes" Grid.Row="4" Grid.Column="1"/>
-
-                <Button x:Name="ButtonDeleteTag" Grid.Column="1" Grid.Row="6" Style="{StaticResource SettingsButton}" 
+                <Button x:Name="ButtonDeleteTag" Grid.Column="1" Grid.Row="6" Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
                         Content="Delete tag" ToolTip="Delete choosen tag"/>
 
                 <Button x:Name="ButtonCancel" Grid.Column="1" Grid.Row="7" Style="{StaticResource SettingsButton}" 
-                        Content="Cancel" ToolTip="Cancel"/>
+                        Content="Cancel" ToolTip="Cancel" MouseDoubleClick="ButtonCancel_MouseDoubleClick"/>
 
             </Grid>
         </Grid>
