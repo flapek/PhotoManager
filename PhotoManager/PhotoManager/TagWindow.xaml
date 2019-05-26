@@ -103,7 +103,7 @@
                         MouseDoubleClick="ButtonAddTag_MouseDoubleClickAsync"/>
 
                 <Button x:Name="ButtonDeleteTag" Grid.Column="1" Grid.Row="6" Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
-                        Content="Delete tag" ToolTip="Delete choosen tag"/>
+                        Content="Delete tag" ToolTip="Delete choosen tag" MouseDoubleClick="ButtonDeleteTag_MouseDoubleClickAsync"/>
 
                 <Button x:Name="ButtonCancel" Grid.Column="1" Grid.Row="7" Style="{StaticResource SettingsButton}" 
                         Content="Cancel" ToolTip="Cancel" MouseDoubleClick="ButtonCancel_MouseDoubleClick"/>

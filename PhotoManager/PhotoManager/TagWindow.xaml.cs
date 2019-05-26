@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Linq;
 
 namespace PhotoManager
 {
@@ -11,7 +12,6 @@ namespace PhotoManager
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
         private bool isDataDirty = false;
 
-        private string actualChoosenTag = string.Empty;
         private bool IsTagChoosen = false;
 
         public TagWindow()
@@ -33,7 +33,7 @@ namespace PhotoManager
         {
             if (isDataDirty)
             {
-                if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning, MessageBoxButton.YesNo, 
+                if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning, MessageBoxButton.YesNo,
                     MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     Close();
@@ -69,43 +69,65 @@ namespace PhotoManager
             }
         }
 
+        private async void ButtonDeleteTag_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        {
+            ListBoxItem item = (ListBoxItem)ListBoxTag.SelectedItem;
+
+            if (MessageBox.Show(Constants.MessageBoxDelete, Constants.CaptionNameWarning,
+                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                Tags tags = managerDBEntities.Tags.First(x => x.TagName == item.Tag.ToString());
+                managerDBEntities.Tags.Remove(tags);
+
+                int done = await managerDBEntities.SaveChangesAsync();
+                if (done == 1)
+                {
+                    MessageBox.Show(Constants.MessageBoxDataDelete, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
+                    TextBoxTagName.Text = string.Empty;
+
+                    LoadTagsFromEntity();
+                }
+            }
+        }
+
         private void ButtonCancel_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
 
         #endregion
-
-        //proprawić 
+ 
         #region TextBox control
 
         private void TextBoxTagName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            ListBoxItem item = (ListBoxItem)ListBoxTag.SelectedItem;
+
             if (IsTagChoosen)
             {
-                if (TextBoxTagName.Text == actualChoosenTag)
+                if (TextBoxTagName.Text != item.Content)
+                {
+                    ButtonAddTag.IsEnabled = true;
+                    ButtonDeleteTag.IsEnabled = true;
+                    isDataDirty = true;
+                }
+                else
                 {
                     ButtonAddTag.IsEnabled = false;
                     ButtonDeleteTag.IsEnabled = true;
                     isDataDirty = false;
                 }
-                else
+            }
+            else
+            {
+                if (TextBoxTagName.Text != item.Content)
                 {
                     ButtonAddTag.IsEnabled = true;
                     ButtonDeleteTag.IsEnabled = false;
                     isDataDirty = true;
                 }
-            }
-            else
-            {
-                if (TextBoxTagName.Text == actualChoosenTag)
+                else
                 {
                     ButtonAddTag.IsEnabled = false;
                     ButtonDeleteTag.IsEnabled = false;
                     isDataDirty = false;
-                }
-                else
-                {
-                    ButtonAddTag.IsEnabled = true;
-                    ButtonDeleteTag.IsEnabled = false;
-                    isDataDirty = true;
                 }
             }
         }
@@ -151,9 +173,10 @@ namespace PhotoManager
             IsTagChoosen = true;
 
             TextBoxTagName.Text = listBoxItem.Tag.ToString();
-            actualChoosenTag = listBoxItem.Tag.ToString();
         }
 
         #endregion
+
+
     }
 }

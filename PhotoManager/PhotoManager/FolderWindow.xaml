@@ -98,7 +98,7 @@
                             MouseDoubleClick="ButtonAddFolder_MouseDoubleClick"/>
                     <Button x:Name="ButtonDeleteFolder" Grid.Column="2" 
                             Style="{StaticResource SettingsButton}" Content="Delete folder"
-                            ToolTip="Delete choosen folder" MouseDoubleClick="ButtonDeleteFolder_MouseDoubleClick"/>
+                            ToolTip="Delete choosen folder" MouseDoubleClick="ButtonDeleteFolder_MouseDoubleClickAsync"/>
                 </Grid>
             </Grid>
 

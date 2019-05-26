@@ -47,7 +47,7 @@ namespace PhotoManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            CreateTreeView();
+            LoadFolderFromEntity();
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace PhotoManager
         private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
         {
             FolderView.Items.Clear();
-            CreateTreeView();
+            LoadFolderFromEntity();
         }
 
         private void ButtonAddFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -66,24 +66,31 @@ namespace PhotoManager
             windowAddFolder.ShowDialog();
         }
 
-        //usuwanie folderu nie działa 
-        private void ButtonDeleteFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        //obsłużyć usuwanie wszytskich elementów w danym folderze
+        private async void ButtonDeleteFolder_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
             int folderId = Convert.ToInt32(selectedFolder.Tag.ToString());
 
-            if (MessageBox.Show(Constants.MessageBoxFolderClose, Constants.CaptionNameWarning,
+            if (MessageBox.Show(Constants.MessageBoxDelete, Constants.CaptionNameWarning,
                 MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                Folders folders = new Folders
-                {
-                    Id = folderId
-                };
+                Folders folders = managerDBEntities.Folders.First(x => x.Id == folderId);
 
-                managerDBEntities.Folders.Attach(folders);
                 managerDBEntities.Folders.Remove(folders);
-                FolderView.Items.Remove(FolderView.SelectedItem);
+                int done = await managerDBEntities.SaveChangesAsync();
+
+                if (done == 1)
+                {
+                    MessageBox.Show(Constants.MessageBoxDataDelete, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
+                    TextBoxFolderName.Text = string.Empty;
+                    RichTextBoxFolderDescription.Selection.Text = string.Empty;
+
+                    LoadFolderFromEntity();
+                }
             }
+            
+            
         }
 
         private void ButtonCancelChanges_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
@@ -92,8 +99,10 @@ namespace PhotoManager
 
         #region Local function
 
-        private void CreateTreeView()
+        private void LoadFolderFromEntity()
         {
+            FolderView.Items.Clear();
+
             foreach (Folders folder in managerDBEntities.Folders)
             {
                 if (folder.ParentFolder == null)
@@ -191,6 +200,8 @@ namespace PhotoManager
 
         #endregion
 
+
+        //do poprawy całe
         #region Data change
 
         private void RichTextBoxFolderDescription_TextChanged(object sender, TextChangedEventArgs e)
@@ -215,18 +226,16 @@ namespace PhotoManager
         private void TextBoxFolderName_TextChanged(object sender, TextChangedEventArgs e)
         {
             TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
-            int folderID = Convert.ToInt32(selectedFolder.Tag.ToString());
-            string folderName = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Name).First();
 
-            if (folderName == TextBoxFolderName.Text)
+            if (selectedFolder.Name == TextBoxFolderName.Text)
             {
                 ButtonSaveChanges.IsEnabled = false;
                 isDataDirty = false;
             }
             else
             {
-                ButtonSaveChanges.IsEnabled = false;
-                isDataDirty = false;
+                ButtonSaveChanges.IsEnabled = true;
+                isDataDirty = true;
             }
 
 
