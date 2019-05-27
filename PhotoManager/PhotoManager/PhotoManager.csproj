@@ -103,6 +103,9 @@
     <Compile Include="Model\Tags.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="PhotoWindow.xaml.cs">
+      <DependentUpon>PhotoWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -118,7 +121,9 @@
     <Compile Include="Window_AddFolder.xaml.cs">
       <DependentUpon>Window_AddFolder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Workers\Delete\DeleteDataFromEntity.cs" />
     <Compile Include="Workers\ImageConverter.cs" />
+    <Compile Include="Workers\LoadData\LoadCarouselDataModel.cs" />
     <Compile Include="Workers\Open\FileExplorer.cs" />
     <Compile Include="Workers\Open\OpenEditingProgram.cs" />
     <Compile Include="Workers\WidthConverter.cs" />
@@ -187,6 +192,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PhotoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

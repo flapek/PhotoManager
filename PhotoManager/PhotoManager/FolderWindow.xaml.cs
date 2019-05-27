@@ -1,7 +1,9 @@
 ﻿using PhotoManager.Model;
+using PhotoManager.Workers.Delete;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +13,7 @@ namespace PhotoManager
     public partial class FolderWindow : Window
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
+        private DeleteDataFromEntity delete = new DeleteDataFromEntity();
         private bool isDataDirty = false;
 
         public FolderWindow()
@@ -32,7 +35,7 @@ namespace PhotoManager
         {
             if (isDataDirty)
             {
-                if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning, 
+                if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning,
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     Close();
@@ -66,31 +69,33 @@ namespace PhotoManager
             windowAddFolder.ShowDialog();
         }
 
-        //obsłużyć usuwanie wszytskich elementów w danym folderze
         private async void ButtonDeleteFolder_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
         {
-            TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
             int folderId = Convert.ToInt32(selectedFolder.Tag.ToString());
-
-            if (MessageBox.Show(Constants.MessageBoxDelete, Constants.CaptionNameWarning,
-                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            IQueryable<Folders> folders = managerDBEntities.Folders.Where(x => x.ParentFolder == folderId);
+            if (selectedFolder.HasItems)
             {
-                Folders folders = managerDBEntities.Folders.First(x => x.Id == folderId);
-
-                managerDBEntities.Folders.Remove(folders);
-                int done = await managerDBEntities.SaveChangesAsync();
-
-                if (done == 1)
+                if (MessageBox.Show(Constants.MessageBoxDeleteAll, Constants.CaptionNameWarning,
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    MessageBox.Show(Constants.MessageBoxDataDelete, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
-                    TextBoxFolderName.Text = string.Empty;
-                    RichTextBoxFolderDescription.Selection.Text = string.Empty;
-
-                    LoadFolderFromEntity();
+                    if (await delete.DeleteFolderTreeAsync(folders, folderId))
+                    {
+                        DataIsSucessfulyDelete();
+                    }
                 }
             }
-            
-            
+            else
+            {
+                if (MessageBox.Show(Constants.MessageBoxDelete, Constants.CaptionNameWarning,
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    if (await delete.DeleteFolderTreeAsync(folders, folderId))
+                    {
+                        DataIsSucessfulyDelete();
+                    }
+                }
+            }
         }
 
         private void ButtonCancelChanges_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
@@ -98,6 +103,15 @@ namespace PhotoManager
         #endregion
 
         #region Local function
+
+        private void DataIsSucessfulyDelete()
+        {
+            MessageBox.Show(Constants.MessageBoxDataDelete, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
+            TextBoxFolderName.Text = string.Empty;
+            RichTextBoxFolderDescription.Selection.Text = string.Empty;
+
+            LoadFolderFromEntity();
+        }
 
         private void LoadFolderFromEntity()
         {
@@ -157,6 +171,8 @@ namespace PhotoManager
                     subItem.Expanded += Item_Expanded;
 
                     item.Items.Add(subItem);
+
+                    subItem.MouseDoubleClick += Item_MouseDoubleClick;
                 }
             }
 
@@ -164,8 +180,9 @@ namespace PhotoManager
 
         #endregion
 
-        #region TreeView interaction
         //dodać wyświetlnie comboboxu odpowiedniego 
+        #region TreeView interaction
+
         private void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)sender;
@@ -173,7 +190,13 @@ namespace PhotoManager
             IQueryable<string> foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description);
 
             TextBoxFolderName.Text = item.Header.ToString();
-            TextBoxFolderName.Tag = item.Header.ToString();
+            TextBoxFolderName.Tag = item.Tag;
+
+            //if (managerDBEntities.Folders.Where(x => x.Id == folderID && x.ParentFolder != null) != null)
+            //{
+            //    ComboBoxParentFolder.SelectedValuePath = managerDBEntities.Folders.Where(x => x.ParentFolder == folderID).Select(x => x.Name).First().ToString();
+            //}
+
             foreach (string text in foldersDescription)
             {
                 RichTextBoxFolderDescription.Selection.Text = text;
@@ -200,15 +223,23 @@ namespace PhotoManager
 
         #endregion
 
-
         //do poprawy całe
         #region Data change
 
         private void RichTextBoxFolderDescription_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
             int folderID = Convert.ToInt32(selectedFolder.Tag.ToString());
-            string foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description).First();
+            string foldersDescription = string.Empty;
+            try
+            {
+                foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description).First();
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
 
             if (foldersDescription == RichTextBoxFolderDescription.Selection.Text)
             {
@@ -225,7 +256,7 @@ namespace PhotoManager
 
         private void TextBoxFolderName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TreeViewItem selectedFolder = (TreeViewItem)FolderView.ItemContainerGenerator.ContainerFromItem(FolderView.SelectedItem);
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
 
             if (selectedFolder.Name == TextBoxFolderName.Text)
             {

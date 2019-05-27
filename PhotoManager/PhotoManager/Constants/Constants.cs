@@ -16,6 +16,7 @@
         public const string MessageBoxFolderIsAdded = "Folder is added.";
         public const string MessageBoxTagIsAdded = "Tag is added.";
         public const string MessageBoxDelete = "Do you want delete it?";
+        public const string MessageBoxDeleteAll = "Do you want delete all items from this place?";
         public const string MessageBoxIncorectData = "Data name is incorect or data alredy exists!!!";
         public const string MessageBoxTagChangeIsSaved = "Succesfully save change.";
         public const string MessageBoxDataDelete = "Data is sucessfuly delete.";

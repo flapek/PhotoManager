@@ -1,15 +1,13 @@
 ﻿using PhotoManager.Model;
-using PhotoManager.Workers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 
 namespace PhotoManager.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
         public MainViewModel(ObservableCollection<DataModel> imageData)
-        {            
+        {             
             if (imageData.Count != 0)
             {
                 FolderOrImageDAB = imageData;

@@ -1,0 +1,72 @@
+﻿<Window x:Class="PhotoManager.PhotoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoManager"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="clr-namespace:PhotoManager.Workers"
+        mc:Ignorable="d"
+        Title="Photo Edit" Height="450" Width="800" WindowStartupLocation="CenterScreen" 
+        Name="Window" WindowStyle="None" MouseDown="Window_MouseDown">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+            <GradientStop Color="WhiteSmoke" Offset="0"/>
+            <GradientStop Color="LightBlue" Offset="0.3"/>
+            <GradientStop Color="SteelBlue" Offset="1.0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:WidthConverter x:Key="WidthConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Name="TopPanel">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Style="{StaticResource StyleNoneButton}" Name="ButtonMinimizeWindow" 
+                            MouseLeftButtonDown="ButtonMinimizeWindow_Click" 
+                            PreviewMouseLeftButtonDown="ButtonMinimizeWindow_Click" ToolTip="Minimize window">
+                    <materialDesign:PackIcon Kind="WindowMinimize" Width="20" Height="20"/>
+                </Button>
+
+                <Button Style="{StaticResource StyleNoneButton}" Name="ButtonMaximize" Grid.Column="1"
+                            MouseLeftButtonDown="ButtonMaximizeWindow_Click" 
+                            PreviewMouseLeftButtonDown="ButtonMaximizeWindow_Click" ToolTip="Maximize window">
+                    <materialDesign:PackIcon Kind="WindowMaximize" Width="20" Height="20"/>
+                </Button>
+
+                <Button Style="{StaticResource StyleNoneButton}" Name="ButtonCloseWindow" Grid.Column="2"
+                            MouseLeftButtonDown="ButtonCloseWindow_Click" 
+                            PreviewMouseLeftButtonDown="ButtonCloseWindow_Click" ToolTip="Close app">
+                    <materialDesign:PackIcon Kind="WindowClose" Width="20" Height="20"/>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            
+        </Grid>
+    </Grid>
+</Window>

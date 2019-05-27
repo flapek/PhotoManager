@@ -6,11 +6,17 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.ComponentModel;
 using System.Collections;
+using PhotoManager.ViewModel;
+using PhotoManager.Model;
+using System.Collections.ObjectModel;
+using PhotoManager.Workers.LoadData;
 
 namespace PhotoManager.CarouselControl
 {
     public class CarouselControl : Canvas, ICarouselControl
     {
+        private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
+
         public CarouselControl()
         {
             timer.Tick += TimerTick;
@@ -21,8 +27,27 @@ namespace PhotoManager.CarouselControl
             canvas = new Canvas();
             canvas.HorizontalAlignment = HorizontalAlignment.Stretch;
             canvas.VerticalAlignment = VerticalAlignment.Stretch;
-
+            canvas.MouseRightButtonDown += Canvas_MouseRightButtonDownAsync;
             Children.Add(canvas);
+        }
+
+        private async void Canvas_MouseRightButtonDownAsync(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                MainViewModel viewModel = DataContext as MainViewModel;
+
+                int id = viewModel.SelectedFolderOrImage.Id;
+
+                ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
+                viewModel.FolderOrImageDAB.Clear();
+
+                DataContext = new MainViewModel(dataModel);
+            }
+            catch (Exception)
+            {
+                //ignore
+            } 
         }
 
         ~CarouselControl()
@@ -63,7 +88,7 @@ namespace PhotoManager.CarouselControl
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty CarouselItemTemplateProperty = DependencyProperty.Register("CarouselItemTemplate", 
+        public static readonly DependencyProperty CarouselItemTemplateProperty = DependencyProperty.Register("CarouselItemTemplate",
             typeof(ControlTemplate), typeof(CarouselControl), new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnCarouselItemTemplateChanged)));
 
         public ControlTemplate CarouselItemTemplate
@@ -398,7 +423,7 @@ namespace PhotoManager.CarouselControl
 
         private static double GetDegreesNeededToPlaceElementInFront(double currentRotation, int targetIndex, int totalNumberOfElements)
         {
-            double rawDegrees = -(180.0 - (currentRotation + 360.0 * ((double)targetIndex / (double)totalNumberOfElements)));
+            double rawDegrees = -(180.0 - (currentRotation + (360.0 * ((double)targetIndex / (double)totalNumberOfElements))));
 
             if (rawDegrees > 180)
             {
@@ -496,7 +521,7 @@ namespace PhotoManager.CarouselControl
 
         private double RadiansToDegrees(double radians)
         {
-            return (360.0 * radians) / (Math.PI + Math.PI );
+            return (360.0 * radians) / (Math.PI + Math.PI);
         }
 
         private double GetCoefficient(double degrees)
@@ -506,12 +531,12 @@ namespace PhotoManager.CarouselControl
 
         private void SetOpacity(FrameworkElement element, double degrees)
         {
-            element.Opacity = (1.0 - Fade) + Fade * GetCoefficient(degrees);
+            element.Opacity = (1.0 - Fade) + (Fade * GetCoefficient(degrees));
         }
 
         private double GetScaledSize(double degrees)
         {
-            return (1.0 - Scale) + Scale * GetCoefficient(degrees);
+            return (1.0 - Scale) + (Scale * GetCoefficient(degrees));
         }
 
         private int GetZValue(double degrees)
@@ -529,22 +554,22 @@ namespace PhotoManager.CarouselControl
             FrameworkElement element = GetChild(0);
             double elementHalfWidth = element.ActualWidth / 2.0;
             double elementHalfHeight = element.ActualHeight / 2.0;
-            double canvasHalfWidth = VerticalOrientation ? 0 : ActualWidth / 2.0 - elementHalfWidth;
-            double canvasHalfHeight = VerticalOrientation ? canvasHalfHeight = ActualHeight / 2.0 - elementHalfHeight : 0;
+            double canvasHalfWidth = VerticalOrientation ? 0 : (ActualWidth / 2.0) - elementHalfWidth;
+            double canvasHalfHeight = VerticalOrientation ? canvasHalfHeight = (ActualHeight / 2.0) - elementHalfHeight : 0;
 
             for (int index = 0; index < canvas.Children.Count; index++)
             {
-                double degrees = (360 * (double)index ) / (double)canvas.Children.Count + _currentRotation;
+                double degrees = ((360 * (double)index) / (double)canvas.Children.Count) + _currentRotation;
                 double cosineAngle = Math.Cos(DegreesToRadians(degrees));
                 double sineAngle = Math.Sin(DegreesToRadians(degrees));
 
                 element = GetChild(index);
 
-                double x = -canvasHalfWidth * sineAngle - (double.IsNaN(canvasHalfHeight) ? 0.0 : canvasHalfHeight / 100.0) * cosineAngle * TiltInDegrees;
-                Canvas.SetLeft(element, x + ActualWidth / 2.0 - elementHalfWidth);
+                double x = (-canvasHalfWidth * sineAngle) - ((double.IsNaN(canvasHalfHeight) ? 0.0 : canvasHalfHeight / 100.0) * cosineAngle * TiltInDegrees);
+                SetLeft(element, x + (ActualWidth / 2.0) - elementHalfWidth);
 
-                double y = canvasHalfHeight * sineAngle - (double.IsNaN(canvasHalfWidth) ? 0.0 : canvasHalfWidth / 100.0) * cosineAngle * TiltInDegrees;
-                Canvas.SetTop(element, y + ActualHeight / 2.0 - elementHalfHeight);
+                double y = (canvasHalfHeight * sineAngle) - ((double.IsNaN(canvasHalfWidth) ? 0.0 : canvasHalfWidth / 100.0) * cosineAngle * TiltInDegrees);
+                SetTop(element, y + (ActualHeight / 2.0) - elementHalfHeight);
 
                 ScaleTransform scale = element.RenderTransform as ScaleTransform;
                 if (scale == null)
@@ -557,7 +582,7 @@ namespace PhotoManager.CarouselControl
                 scale.CenterY = elementHalfHeight;
                 double scaledSize = GetScaledSize(degrees);
                 scale.ScaleX = scale.ScaleY = scaledSize * scaledSize;
-                Canvas.SetZIndex(element, GetZValue(degrees));
+                SetZIndex(element, GetZValue(degrees));
 
                 SetOpacity(element, degrees);
             }
@@ -565,7 +590,7 @@ namespace PhotoManager.CarouselControl
 
         #region ICarouselControl
 
-        public bool ShowRotation{ get; set; }
+        public bool ShowRotation { get; set; }
 
         public void SelectElement(FrameworkElement element)
         {
@@ -596,7 +621,7 @@ namespace PhotoManager.CarouselControl
 
             // δ θ = asin((width/2 – x1)/R) - asin((width/2 – x2)/R)
 
-            double deltaTheta = Math.Asin((Width / 2.0 - pt1.X) / R) - Math.Asin((Width / 2.0 - pt2.X) / R);
+            double deltaTheta = Math.Asin(((Width / 2.0) - pt1.X) / R) - Math.Asin(((Width / 2.0) - pt2.X) / R);
 
             if (deltaTheta.CompareTo(double.NaN) == 0)
             {
@@ -628,7 +653,7 @@ namespace PhotoManager.CarouselControl
                 }
                 else
                 {
-                    if (Canvas.GetZIndex(child as FrameworkElement) > Canvas.GetZIndex(frameworkElement))
+                    if (GetZIndex(child as FrameworkElement) > GetZIndex(frameworkElement))
                     {
                         frameworkElement = child as FrameworkElement;
                     }

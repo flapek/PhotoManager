@@ -1,6 +1,6 @@
 ﻿using PhotoManager.Model;
 using PhotoManager.ViewModel;
-using PhotoManager.Workers;
+using PhotoManager.Workers.LoadData;
 using PhotoManager.Workers.Open;
 using System;
 using System.Collections.ObjectModel;
@@ -10,9 +10,6 @@ using System.Windows.Input;
 
 namespace PhotoManager
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
@@ -48,44 +45,6 @@ namespace PhotoManager
             viewModel.SelectedFolderOrImage = selectedElement.DataContext as DataModel;
         }
 
-        private void ButtonPreviousPhotoOrFolder_Click(object sender, RoutedEventArgs e)
-        {
-            MainViewModel viewModel = DataContext as MainViewModel;
-            if (viewModel == null)
-            {
-                return;
-            }
-
-            int position = viewModel.SelectedFolderOrImage != null ? viewModel.FolderOrImageDAB.IndexOf(viewModel.SelectedFolderOrImage) : 0;
-            if (position > 0)
-            {
-                viewModel.SelectedFolderOrImage = viewModel.FolderOrImageDAB[position - 1];
-            }
-            else if (position == 0)
-            {
-                viewModel.SelectedFolderOrImage = viewModel.FolderOrImageDAB[viewModel.FolderOrImageDAB.Count - 1];
-            }
-        }
-
-        private void ButtonNextPhotoOrFolder_Click(object sender, RoutedEventArgs e)
-        {
-            MainViewModel viewModel = DataContext as MainViewModel;
-            if (viewModel == null)
-            {
-                return;
-            }
-
-            int position = viewModel.SelectedFolderOrImage != null ? viewModel.FolderOrImageDAB.IndexOf(viewModel.SelectedFolderOrImage) : 0;
-            if (position < (viewModel.FolderOrImageDAB.Count - 1))
-            {
-                viewModel.SelectedFolderOrImage = viewModel.FolderOrImageDAB[position + 1];
-            }
-            else if (position == (viewModel.FolderOrImageDAB.Count - 1))
-            {
-                viewModel.SelectedFolderOrImage = viewModel.FolderOrImageDAB[0];
-            }
-        }
-
         private void _checkBoxVerticalCarousel_Click(object sender, RoutedEventArgs e)
         {
             CarouselFolderOrImage.VerticalOrientation = _checkBoxVerticalCarousel.IsChecked ?? false;
@@ -118,27 +77,23 @@ namespace PhotoManager
                 DragMove();
         }
 
+        private async void ButtonBack_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region Window Loaded
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
-            foreach (var imageOrFolderInfo in managerDBEntities.Folders)
-            {
-                imageData.Add(new DataModel()
-                {
-                    Id = imageOrFolderInfo.Id,
-                    Name = imageOrFolderInfo.Name,
-                    ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(imageOrFolderInfo.MetaDataPicture),
-                    Description = imageOrFolderInfo.Description
-                });
-            }
+            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders);
 
-            DataContext = new MainViewModel(imageData);
+            DataContext = new MainViewModel(dataModel);
         }
 
         #endregion
@@ -172,7 +127,8 @@ namespace PhotoManager
 
         private void ListViewItemPhoto_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
+            PhotoWindow photoWindow = new PhotoWindow();
+            photoWindow.ShowDialog();
         }
 
         private void ListViewItemTag_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -186,38 +142,12 @@ namespace PhotoManager
         private void ListViewItemSettings_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.ShowDialog();         
+            settingsWindow.ShowDialog();
         }
 
         private void ListViewItemCloseApp_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
 
         private void BaseMainMenuPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MainMenuPanel.Visibility = Visibility.Visible;
-
-        #endregion
-
-        #region Folder interaction
-
-        /// <summary>
-        /// When user interact with folder option
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-
-        private void AddFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void EditFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void DeleteFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
 
         #endregion
 

@@ -8,5 +8,6 @@ namespace PhotoManager.Model
         public string Name { get; set; }
         public BitmapImage ImageSource { get; set; }
         public string Description { get; set; }
+        public bool IsFolder { get; set; }
     }
 }
