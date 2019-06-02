@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhotoManagerDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Folders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="60" Nullable="false" />
+    <Property Name="MetaDataPicture" Type="image" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="ParentFolder" Type="int" />
+  </EntityType>
+  <EntityType Name="Images">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MetaDataPicture" Type="image" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="FolderId" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'PhotoManagerDB.dbo.ImageWithTags' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="ImageWithTags">
+    <Key>
+      <PropertyRef Name="ImageId" />
+      <PropertyRef Name="TagName" />
+    </Key>
+    <Property Name="ImageId" Type="int" Nullable="false" />
+    <Property Name="TagName" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tags">
+    <Key>
+      <PropertyRef Name="TagName" />
+    </Key>
+    <Property Name="TagName" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Folders_Folders">
+    <End Role="Folders" Type="Self.Folders" Multiplicity="0..1" />
+    <End Role="Folders1" Type="Self.Folders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Folders">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Folders1">
+        <PropertyRef Name="ParentFolder" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Images_Folders">
+    <End Role="Folders" Type="Self.Folders" Multiplicity="1" />
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Folders">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="FolderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ImageWithTags_Images">
+    <End Role="Images" Type="Self.Images" Multiplicity="1" />
+    <End Role="ImageWithTags" Type="Self.ImageWithTags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Images">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ImageWithTags">
+        <PropertyRef Name="ImageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ImageWithTags_Tags">
+    <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
+    <End Role="ImageWithTags" Type="Self.ImageWithTags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tags">
+        <PropertyRef Name="TagName" />
+      </Principal>
+      <Dependent Role="ImageWithTags">
+        <PropertyRef Name="TagName" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PhotoManagerDBModelStoreContainer">
+    <EntitySet Name="Folders" EntityType="Self.Folders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImageWithTags" EntityType="Self.ImageWithTags" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ImageWithTags].[ImageId] AS [ImageId], 
+    [ImageWithTags].[TagName] AS [TagName]
+    FROM [dbo].[ImageWithTags] AS [ImageWithTags]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_Folders_Folders" Association="Self.FK_Folders_Folders">
+      <End Role="Folders" EntitySet="Folders" />
+      <End Role="Folders1" EntitySet="Folders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Images_Folders" Association="Self.FK_Images_Folders">
+      <End Role="Folders" EntitySet="Folders" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ImageWithTags_Images" Association="Self.FK_ImageWithTags_Images">
+      <End Role="Images" EntitySet="Images" />
+      <End Role="ImageWithTags" EntitySet="ImageWithTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ImageWithTags_Tags" Association="Self.FK_ImageWithTags_Tags">
+      <End Role="Tags" EntitySet="Tags" />
+      <End Role="ImageWithTags" EntitySet="ImageWithTags" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

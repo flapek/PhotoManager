@@ -10,48 +10,52 @@ namespace PhotoManager.Workers.LoadData
     {
         public static async Task<ObservableCollection<DataModel>> LoadCarouselModel(DbSet<Folders> folders)
         {
-            ObservableCollection<DataModel> dataModels = new ObservableCollection<DataModel>();
-            await Task.Run(() => 
+            ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
+
+            await Task.Run(() =>
             {
                 foreach (Folders folder in folders)
                 {
                     if (folder.ParentFolder == null)
                     {
-                        dataModels.Add(new DataModel()
+                        dataModel.Add(new DataModel()
                         {
                             Id = folder.Id,
                             Name = folder.Name,
                             ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
                             Description = folder.Description,
+                            ParentFolder = folder.ParentFolder,
                             IsFolder = true,
                         });
                     }
                 }
             });
 
-            return dataModels;
+            return dataModel;
         }
 
-        public static async Task<ObservableCollection<DataModel>> LoadCarouselModel(DbSet<Folders> folders, int id)
+        public static async Task<ObservableCollection<DataModel>> LoadCarouselModel(DbSet<Folders> folders, int? id)
         {
-            ObservableCollection<DataModel> dataModels = new ObservableCollection<DataModel>();
+            ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
+
             await Task.Run(() =>
             {
-                 foreach (Folders folder in folders.Where(x => x.ParentFolder == id))
-                 {
-                     dataModels.Add(new DataModel()
-                     {
-                         Id = folder.Id,
-                         Name = folder.Name,
-                         ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
-                         Description = folder.Description,
-                         IsFolder = true
-                     });
-                 }
+                foreach (Folders folder in folders.Where(x => x.ParentFolder == id))
+                {
+                    dataModel.Add(new DataModel()
+                    {
+                        Id = folder.Id,
+                        Name = folder.Name,
+                        ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
+                        Description = folder.Description,
+                        ParentFolder = folder.ParentFolder,
+                        IsFolder = true
+                    });
+                }
             });
-            
 
-            return dataModels;
+
+            return dataModel;
         }
     }
 }

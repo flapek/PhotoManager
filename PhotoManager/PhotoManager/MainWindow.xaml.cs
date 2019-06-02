@@ -4,6 +4,7 @@ using PhotoManager.Workers.LoadData;
 using PhotoManager.Workers.Open;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -14,6 +15,7 @@ namespace PhotoManager
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
         private ObservableCollection<DataModel> imageData = new ObservableCollection<DataModel>();
+
         private string splahImage = "Picture\\SplashScreen.jpg";
 
         public MainWindow()
@@ -79,6 +81,19 @@ namespace PhotoManager
 
         private async void ButtonBack_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
         {
+            MainViewModel viewModel = DataContext as MainViewModel;
+
+            int? currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders, viewModel.SelectedFolderOrImage.Id);
+            if (currentId == 0)
+                return;
+
+            viewModel.FolderOrImageDAB.Clear();
+
+            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, currentId);
+
+            foreach (DataModel item in dataModel)
+                viewModel.FolderOrImageDAB.Add(item);
+
 
         }
 

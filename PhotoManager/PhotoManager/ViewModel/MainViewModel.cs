@@ -6,11 +6,11 @@ namespace PhotoManager.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel(ObservableCollection<DataModel> imageData)
+        public MainViewModel(ObservableCollection<DataModel> data)
         {             
-            if (imageData.Count != 0)
+            if (data.Count != 0)
             {
-                FolderOrImageDAB = imageData;
+                FolderOrImageDAB = data;
                 SelectedFolderOrImage = FolderOrImageDAB[0];
             }
         }

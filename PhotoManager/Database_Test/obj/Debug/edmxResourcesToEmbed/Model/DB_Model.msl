@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PhotoManagerDBModelStoreContainer" CdmEntityContainer="PhotoManagerDBEntities">
+    <EntitySetMapping Name="Folders">
+      <EntityTypeMapping TypeName="PhotoManagerDBModel.Folders">
+        <MappingFragment StoreEntitySet="Folders">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MetaDataPicture" ColumnName="MetaDataPicture" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ParentFolder" ColumnName="ParentFolder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Images">
+      <EntityTypeMapping TypeName="PhotoManagerDBModel.Images">
+        <MappingFragment StoreEntitySet="Images">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MetaDataPicture" ColumnName="MetaDataPicture" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="FolderId" ColumnName="FolderId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="PhotoManagerDBModel.Tags">
+        <MappingFragment StoreEntitySet="Tags">
+          <ScalarProperty Name="TagName" ColumnName="TagName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ImageWithTags" TypeName="PhotoManagerDBModel.ImageWithTags" StoreEntitySet="ImageWithTags">
+      <EndProperty Name="Images">
+        <ScalarProperty Name="Id" ColumnName="ImageId" />
+      </EndProperty>
+      <EndProperty Name="Tags">
+        <ScalarProperty Name="TagName" ColumnName="TagName" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

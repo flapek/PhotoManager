@@ -8,35 +8,29 @@ namespace PhotoManager.Workers.Delete
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
 
-        internal async Task<bool> DeleteFolderTreeAsync(IQueryable<Folders> folders, int folderId)
+        internal async Task<bool> DeleteFolderTreeAsync(Folders folder)
         {
             int done;
-            try
-            {
-                if (folders.Count() != 0)
-                {
-                    foreach (Folders folder in folders)
-                    {
-                        await DeleteFolderTreeAsync(folder);
-                    }
-                }
-            }
-            finally
-            {
-                Folders folder = managerDBEntities.Folders.First(x => x.Id == folderId);
-                managerDBEntities.Folders.Remove(folder);
-                done = await managerDBEntities.SaveChangesAsync();
-            }
+            if (folder == null)
+                return false;
+
+            DeleteFolderAsync(folder);
+
+            done = await managerDBEntities.SaveChangesAsync();
 
             return done != 0 ? true : false;
         }
 
-        private async Task DeleteFolderTreeAsync(Folders folder)
+        private void DeleteFolderAsync(Folders folder)
         {
             IQueryable<Folders> folders = managerDBEntities.Folders.Where(x => x.ParentFolder == folder.Id);
-            foreach (Folders subFolder in folders)
+
+            if (folders != null)
             {
-                await DeleteFolderTreeAsync(subFolder);
+                foreach (Folders subFolder in folders)
+                {
+                    DeleteFolderAsync(subFolder);
+                }
             }
             managerDBEntities.Folders.Remove(folder);
         }

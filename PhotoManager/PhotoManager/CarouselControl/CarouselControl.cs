@@ -10,6 +10,7 @@ using PhotoManager.ViewModel;
 using PhotoManager.Model;
 using System.Collections.ObjectModel;
 using PhotoManager.Workers.LoadData;
+using System.Windows.Data;
 
 namespace PhotoManager.CarouselControl
 {
@@ -33,21 +34,20 @@ namespace PhotoManager.CarouselControl
 
         private async void Canvas_MouseRightButtonDownAsync(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
-                MainViewModel viewModel = DataContext as MainViewModel;
+            MainViewModel viewModel = DataContext as MainViewModel;
 
-                int id = viewModel.SelectedFolderOrImage.Id;
+            int id = viewModel.SelectedFolderOrImage.Id;
 
-                ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
-                viewModel.FolderOrImageDAB.Clear();
+            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
 
-                DataContext = new MainViewModel(dataModel);
-            }
-            catch (Exception)
-            {
-                //ignore
-            } 
+            if (dataModel.Count == 0)
+                return;
+
+            viewModel.FolderOrImageDAB.Clear();
+            DataContext = new MainViewModel(dataModel);
+
+            //foreach (DataModel item in dataModel)
+            //    viewModel.FolderOrImageDAB.Add(item);
         }
 
         ~CarouselControl()

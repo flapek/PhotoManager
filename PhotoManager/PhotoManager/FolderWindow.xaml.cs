@@ -73,27 +73,14 @@ namespace PhotoManager
         {
             TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
             int folderId = Convert.ToInt32(selectedFolder.Tag.ToString());
-            IQueryable<Folders> folders = managerDBEntities.Folders.Where(x => x.ParentFolder == folderId);
-            if (selectedFolder.HasItems)
+            Folders folders = managerDBEntities.Folders.Where(x => x.Id == folderId).First();
+
+            if (MessageBox.Show(Constants.MessageBoxDeleteAll, Constants.CaptionNameWarning,
+                MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                if (MessageBox.Show(Constants.MessageBoxDeleteAll, Constants.CaptionNameWarning,
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                if (await delete.DeleteFolderTreeAsync(folders))
                 {
-                    if (await delete.DeleteFolderTreeAsync(folders, folderId))
-                    {
-                        DataIsSucessfulyDelete();
-                    }
-                }
-            }
-            else
-            {
-                if (MessageBox.Show(Constants.MessageBoxDelete, Constants.CaptionNameWarning,
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    if (await delete.DeleteFolderTreeAsync(folders, folderId))
-                    {
-                        DataIsSucessfulyDelete();
-                    }
+                    DataIsSucessfulyDelete();
                 }
             }
         }
@@ -171,11 +158,8 @@ namespace PhotoManager
                     subItem.Expanded += Item_Expanded;
 
                     item.Items.Add(subItem);
-
-                    subItem.MouseDoubleClick += Item_MouseDoubleClick;
                 }
             }
-
         }
 
         #endregion
