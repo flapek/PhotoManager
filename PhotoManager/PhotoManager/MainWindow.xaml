@@ -52,14 +52,6 @@
 
             <converters:WidthConverter x:Key="WidthConverter"/>
 
-            <Style x:Key="LabelStyleCentred" TargetType="Label">
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            </Style>
-
         </ResourceDictionary>
     </Window.Resources>
     <Window.Triggers>

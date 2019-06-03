@@ -1,10 +1,17 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using PhotoManager.Model;
+using PhotoManager.ViewModel;
+using PhotoManager.Workers.LoadData;
 
 namespace PhotoManager
 {
     public partial class PhotoWindow : Window
     {
+        private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
+
         public PhotoWindow()
         {
             InitializeComponent();
@@ -37,14 +44,37 @@ namespace PhotoManager
 
         #endregion
 
+        #region Check box control
+
         private void CheckBoxCanEdit_OnChecked(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            ListBoxTag.IsEnabled = true;
+            TextBoxPhotoName.IsEnabled = true;
+            ComboBoxParentFolder.IsEnabled = true;
+            ButtonAddTag.IsEnabled = true;
+            ButtonDeleteTag.IsEnabled = true;
         }
 
         private void CheckBoxCanEdit_OnUnchecked(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            ListBoxTag.IsEnabled = false;
+            TextBoxPhotoName.IsEnabled = false;
+            ComboBoxParentFolder.IsEnabled = false;
+            ButtonAddTag.IsEnabled = false;
+            ButtonDeleteTag.IsEnabled = false;
         }
+
+        #endregion
+
+        #region Window Loaded
+
+        private void PhotoWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+
+        }
+
+        #endregion
     }
 }

@@ -7,8 +7,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:converters="clr-namespace:PhotoManager.Workers"
         mc:Ignorable="d"
-        Title="Photo Edit" Height="450" Width="800" WindowStartupLocation="CenterScreen" 
-        Name="Window" WindowStyle="None" MouseDown="Window_MouseDown">
+        Title="Photo Edit" MinWidth="1000" MinHeight="600" Height="600" Width="1000" 
+        WindowStartupLocation="CenterScreen" 
+        Name="Window" WindowStyle="None" MouseDown="Window_MouseDown" Loaded="PhotoWindow_OnLoaded">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
             <GradientStop Color="WhiteSmoke" Offset="0"/>
@@ -29,10 +30,15 @@
 
         <Grid Name="TopPanel">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid Background="White" Opacity="0.2"/>
+                <Label Style="{StaticResource BaseStyleLabel}"
+                       Content="{Binding ElementName=Window, Path=Title}"/>
+            </Grid>
 
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -44,6 +50,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+
+                <Grid Grid.ColumnSpan="3" Grid.RowSpan="2" Background="White" Opacity="0.2"/>
 
                 <Button Style="{StaticResource StyleNoneButton}" Name="ButtonMinimizeWindow" 
                             MouseLeftButtonDown="ButtonMinimizeWindow_Click" 
@@ -73,7 +81,8 @@
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="{Binding ElementName=Window, Path=ActualHeight, 
+                        Converter={StaticResource WidthConverter}, ConverterParameter=12}"/>
                     <RowDefinition/>
                     <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
@@ -83,7 +92,8 @@
                 </Grid>
 
                 <Grid Grid.Row="1">
-                    <ListBox x:Name="ListBoxPhoto" SelectionMode="Multiple" Margin="10"/>
+                    <ListBox x:Name="ListBoxPhoto" SelectionMode="Multiple" Margin="10" 
+                             Background="White"/>
                 </Grid>
 
                 <Grid Grid.Row="2">
@@ -92,15 +102,15 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="ButtonAddFolder" Style="{StaticResource SettingsButton}"
+                    <Button x:Name="ButtonAddPhoto" Style="{StaticResource SettingsButton}"
                             Content="Add photo" ToolTip="Add photo to resource" Grid.Column="0"/>
-                    <Button x:Name="ButtonDeleteFolder" Grid.Column="1" 
+                    <Button x:Name="ButtonDeletePhoto" Grid.Column="1" 
                             Style="{StaticResource SettingsButton}" Content="Delete photo"
                             ToolTip="Delete choosen photo"/>
                 </Grid>
             </Grid>
 
-            <Grid Grid.Column="2">
+            <Grid Grid.Column="2" Name="GridInformaction">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
@@ -109,7 +119,8 @@
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="{Binding ElementName=GridInformaction, Path=ActualWidth, 
+                                          Converter={StaticResource WidthConverter}, ConverterParameter=76}"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
@@ -138,10 +149,36 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
+
+                        <StackPanel Margin="5">
+                            <Label FontSize="16" Style="{StaticResource BaseStyleLabel}" 
+                                   Content="Parent Folder"/>
+                            <ComboBox Style="{StaticResource BaseStyleComboBox}" Margin="2"
+                                      x:Name="ComboBoxParentFolder" ToolTip="Choose new parent folder"
+                                      IsEnabled="False"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Margin="5,10">
+                            <Label FontSize="16" Style="{StaticResource BaseStyleLabel}"
+                                   Content="Tags"/>
+                            <ListBox x:Name="ListBoxTag" Height="auto" Margin="5" IsEnabled="False"/>
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="ButtonAddTag" Grid.Column="0" Content="Add"
+                                        Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
+                                        ToolTip="Add new tag"/>
+
+                                <Button x:Name="ButtonDeleteTag" Grid.Column="1" Content="Delete" 
+                                        Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
+                                        ToolTip="Delete tag"/>
+                            </Grid>
+
+                        </StackPanel>
+
                     </Grid>
                 </Grid>
 

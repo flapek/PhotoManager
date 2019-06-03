@@ -10,4 +10,13 @@
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
     </Style>
+
+    <Style x:Key="LabelStyleCentred" TargetType="Label">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+
 </ResourceDictionary>

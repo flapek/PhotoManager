@@ -1,7 +1,5 @@
 ﻿using PhotoManager.Model;
-using PhotoManager.Workers.Delete;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
