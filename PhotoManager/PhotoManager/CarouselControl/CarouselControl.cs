@@ -131,8 +131,8 @@ namespace PhotoManager.CarouselControl
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ItemsSourceProperty = 
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(CarouselControl), 
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(CarouselControl),
                 new FrameworkPropertyMetadata((IEnumerable)null, new PropertyChangedCallback(OnItemsSourceChanged)));
 
         public IEnumerable ItemsSource
@@ -148,7 +148,7 @@ namespace PhotoManager.CarouselControl
 
         protected virtual void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue !=null)
+            if (e.OldValue != null)
             {
                 canvas.Children.Clear();
             }
@@ -324,7 +324,7 @@ namespace PhotoManager.CarouselControl
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty VerticalOrientationProperty = DependencyProperty.Register("VerticalOrientationProperty", 
+        public static readonly DependencyProperty VerticalOrientationProperty = DependencyProperty.Register("VerticalOrientationProperty",
             typeof(bool), typeof(CarouselControl), new FrameworkPropertyMetadata(false, new PropertyChangedCallback(OnVerticalOrientationChanged)));
 
         public bool VerticalOrientation

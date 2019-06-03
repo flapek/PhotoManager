@@ -28,7 +28,6 @@ namespace PhotoManager
             InitializeComponent();
 
             CarouselFolderOrImage.SelectionChanged += CarouselFolderOrImage_SelectionChanged;
-
         }
 
         #region Carousel Control
@@ -55,7 +54,7 @@ namespace PhotoManager
 
         #endregion
 
-        #region Window Control
+        #region Window Button Control
 
         /// <summary>
         ///     Button Window Control
@@ -87,7 +86,11 @@ namespace PhotoManager
             int? currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders, viewModel.SelectedFolderOrImage.Id);
 
             if (currentId == 0)
+            {
+                MessageBox.Show(Constants.MessageBoxCantBack, Constants.CaptionNameInformation, MessageBoxButton.OK,
+                    MessageBoxImage.Information);
                 return;
+            }
 
             viewModel.FolderOrImageDAB.Clear();
 
@@ -107,7 +110,11 @@ namespace PhotoManager
             ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
 
             if (dataModel.Count == 0)
+            {
+                MessageBox.Show(Constants.MessageBoxNoMoreDate, Constants.CaptionNameInformation, MessageBoxButton.OK,
+                    MessageBoxImage.Information);
                 return;
+            }
 
             DataContext = new MainViewModel(dataModel);
         }
@@ -152,7 +159,15 @@ namespace PhotoManager
         private void ListViewItemFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             FolderWindow folderWindow = new FolderWindow();
+            folderWindow.Closing += FolderWindow_ClosingAsync;
             folderWindow.ShowDialog();
+        }
+
+        private async void FolderWindow_ClosingAsync(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders);
+
+            DataContext = new MainViewModel(dataModel);
         }
 
         private void ListViewItemPhoto_MouseDoubleClick(object sender, MouseButtonEventArgs e)

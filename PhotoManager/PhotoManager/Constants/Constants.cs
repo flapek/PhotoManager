@@ -20,7 +20,8 @@
         public const string MessageBoxIncorectData = "Data name is incorect or data alredy exists!!!";
         public const string MessageBoxTagChangeIsSaved = "Succesfully save change.";
         public const string MessageBoxDataDelete = "Data is sucessfuly delete.";
-
+        public const string MessageBoxNoMoreDate = "No more information.";
+        public const string MessageBoxCantBack = "You can't back more!";
 
         #endregion
 
@@ -28,5 +29,6 @@
         public const string OptionHintForOpenEditingProgram = "Here you can choose path to program where you can edit photos.";
         public const string OptionHintForChoosePathToDirectory = "Here you can choose path to main directory where they will by stored photo.";
 
+       
     }
 }

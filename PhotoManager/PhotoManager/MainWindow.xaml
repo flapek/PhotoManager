@@ -166,7 +166,7 @@
                                 <Setter.Value>
                                     <ControlTemplate>
                                         <Border BorderThickness="1" BorderBrush="Gainsboro" 
-                                                Background="SteelBlue" 
+                                                Background="SteelBlue"
                                                 Width="{Binding ElementName=Window, Path=Width, 
                                             Converter={StaticResource WidthConverter}, ConverterParameter=20}" 
                                                 Height="{Binding ElementName= Window, Path=Width, 
@@ -216,7 +216,7 @@
                     <Button Name="ButtonBack" ToolTip="Previous photo/folder"
                             Style="{StaticResource StyleNoneButton}" 
                             MouseDoubleClick="ButtonBack_MouseDoubleClickAsync">
-                        <materialDesign:PackIcon Kind="Backburger" Foreground="#FF313131" Width="40" 
+                        <materialDesign:PackIcon Kind="ArrowBack" Foreground="#FF313131" Width="40" 
                                                  Height="40"/>
                     </Button>
                     <Label Content="Back" Grid.Column="1" 

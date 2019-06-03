@@ -138,7 +138,6 @@
     <Compile Include="Window_AddFolder.xaml.cs">
       <DependentUpon>Window_AddFolder.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Workers\Delete\DeleteDataFromEntity.cs" />
     <Compile Include="Workers\Converters\ImageConverter.cs" />
     <Compile Include="Workers\LoadData\LoadCarouselDataModel.cs" />
     <Compile Include="Workers\Open\FileExplorer.cs" />
@@ -286,6 +285,7 @@
       <DependentUpon>DB_Model.edmx</DependentUpon>
       <LastGenOutput>DB_Model.cs</LastGenOutput>
     </Content>
+    <Resource Include="Picture\folder-open.png" />
     <Resource Include="Picture\SplashScreen.jpg" />
     <Resource Include="Picture\SettingsPanelBackground.png" />
   </ItemGroup>

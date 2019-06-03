@@ -1,17 +1,11 @@
 ﻿using PhotoManager.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using PhotoManager.Workers;
 
 namespace PhotoManager
 {
@@ -19,6 +13,7 @@ namespace PhotoManager
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
         private bool isDataDirty = false;
+        private readonly string folderPath = @"pack://application:,,,/Picture/folder-open.png";
 
         public Window_AddFolder()
         {
@@ -78,8 +73,9 @@ namespace PhotoManager
                 {
                     Name = TextBoxFolderName.Text,
                     Description = new TextRange(RichTextBoxFolderDescription.Document.ContentStart, RichTextBoxFolderDescription.Document.ContentEnd).Text,
-                    ParentFolder = null
-                });
+                    ParentFolder = null,
+                    MetaDataPicture = ImageConverter.ConvertImageToByteArray(new BitmapImage(new Uri(folderPath)))
+            });
             }
             else
             {
@@ -87,7 +83,8 @@ namespace PhotoManager
                 {
                     Name = TextBoxFolderName.Text,
                     Description = new TextRange(RichTextBoxFolderDescription.Document.ContentStart, RichTextBoxFolderDescription.Document.ContentEnd).Text,
-                    ParentFolder = Convert.ToInt32(selectedTag)
+                    ParentFolder = Convert.ToInt32(selectedTag),
+                    MetaDataPicture = ImageConverter.ConvertImageToByteArray(new BitmapImage(new Uri(folderPath)))
                 });
             }
             int done = await managerDBEntities.SaveChangesAsync();

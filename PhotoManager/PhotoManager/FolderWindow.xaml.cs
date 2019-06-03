@@ -13,7 +13,6 @@ namespace PhotoManager
     public partial class FolderWindow : Window
     {
         private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
-        private DeleteDataFromEntity delete = new DeleteDataFromEntity();
         private bool isDataDirty = false;
 
         public FolderWindow()
@@ -78,7 +77,7 @@ namespace PhotoManager
             if (MessageBox.Show(Constants.MessageBoxDeleteAll, Constants.CaptionNameWarning,
                 MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                if (await delete.DeleteFolderTreeAsync(folders))
+                if (await DeleteFolderTreeAsync(folders))
                 {
                     DataIsSucessfulyDelete();
                 }
@@ -160,6 +159,33 @@ namespace PhotoManager
                     item.Items.Add(subItem);
                 }
             }
+        }
+
+        private async Task<bool> DeleteFolderTreeAsync(Folders folder)
+        {
+            int done;
+            if (folder == null)
+                return false;
+
+            await DeleteFolderAsync(folder);
+            done = await managerDBEntities.SaveChangesAsync();
+
+            return done != 0 ? true : false;
+        }
+
+        private async Task DeleteFolderAsync(Folders folder)
+        {
+            IQueryable<Folders> folders = managerDBEntities.Folders.Where(x => x.ParentFolder == folder.Id);
+
+            if (folders != null)
+            {
+                foreach (Folders subFolder in folders)
+                {
+                    await DeleteFolderAsync(subFolder);
+                }
+            }
+
+            managerDBEntities.Folders.Remove(folder);
         }
 
         #endregion
