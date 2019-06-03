@@ -37,5 +37,14 @@ namespace PhotoManager
 
         #endregion
 
+        private void CheckBoxCanEdit_OnChecked(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void CheckBoxCanEdit_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
