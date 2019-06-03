@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PhotoManager"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:converters="clr-namespace:PhotoManager.Workers"
         xmlns:CarouselControl="clr-namespace:PhotoManager.CarouselControl"
@@ -154,12 +153,13 @@
 
             <Grid Name="PanelCarousel" Grid.Row="2">
                 <CarouselControl:CarouselControl x:Name="CarouselFolderOrImage" 
-                                                 ItemsSource="{Binding FolderOrImageDAB}" 
+                                                 ItemsSource="{Binding FolderOrImageDAB, 
+                    UpdateSourceTrigger=PropertyChanged}" 
                                                  SelectedItem="{Binding SelectedFolderOrImage, Mode=TwoWay}" 
-                                                 ShowRotation="True"  TiltInDegrees="10" 
-                                                 AutoSizeToParent="true"
-                                                 RotationSpeed="100" VerticalOrientation="False" 
-                                                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                                 ShowRotation="True" TiltInDegrees="10" 
+                                                 AutoSizeToParent="true" RotationSpeed="100" 
+                                                 VerticalOrientation="False" HorizontalAlignment="Stretch" 
+                                                 VerticalAlignment="Stretch">
                     <CarouselControl:CarouselControl.Style>
                         <Style TargetType="CarouselControl:CarouselControl">
                             <Setter Property="CarouselItemTemplate" >
@@ -174,17 +174,15 @@
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*"/>
-                                                    <RowDefinition Height="20"/>
+                                                    <RowDefinition Height="26"/>
                                                 </Grid.RowDefinitions>
                                                 <Border Grid.Row="0" BorderThickness="0" Background="White">
                                                     <Image Grid.Row="0" Source="{Binding ImageSource}" 
                                                            Stretch="Uniform" Margin="5"/>
                                                 </Border>
                                                 <Label Grid.Row="1" Content="{Binding Name}" 
-                                                       Foreground="White" 
-                                                       Background="Transparent" FontSize="16" 
-                                                       FontFamily="Arial" 
-                                                       Height="Auto" 
+                                                       Foreground="White" Background="Transparent" 
+                                                       FontSize="18" FontFamily="Arial" 
                                                        Style="{StaticResource LabelStyleCentred}"
                                                        DockPanel.Dock="Bottom"/>
                                             </Grid>
@@ -212,6 +210,8 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Button Name="ButtonBack" ToolTip="Previous photo/folder"
                             Style="{StaticResource StyleNoneButton}" 
@@ -221,6 +221,12 @@
                     </Button>
                     <Label Content="Back" Grid.Column="1" 
                            Style="{StaticResource BaseStyleLabel}" HorizontalAlignment="Left"/>
+                    <Button Name="ButtonNext" ToolTip="Previous photo/folder" Grid.Column="2"
+                            Style="{StaticResource StyleNoneButton}" 
+                            Click="ButtonNext_OnClick">
+                        <materialDesign:PackIcon Kind="FolderOpen" Foreground="#FF313131" Width="40" 
+                                                 Height="40"/>
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>
@@ -236,7 +242,7 @@
                 <RowDefinition Height="120"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
+
             <Grid.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -245,7 +251,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </Grid.RenderTransform>
-            
+
             <Image Source="C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\Picture\MenuTabBackground.jpg" 
                                    Stretch="UniformToFill" Height="120"/>
 

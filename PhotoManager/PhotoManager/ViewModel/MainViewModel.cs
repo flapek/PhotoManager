@@ -6,11 +6,11 @@ namespace PhotoManager.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel(ObservableCollection<DataModel> data)
+        public MainViewModel(ObservableCollection<DataModel> imageData)
         {             
-            if (data.Count != 0)
+            if (imageData.Count != 0)
             {
-                FolderOrImageDAB = data;
+                FolderOrImageDAB = imageData;
                 SelectedFolderOrImage = FolderOrImageDAB[0];
             }
         }
@@ -37,14 +37,17 @@ namespace PhotoManager.ViewModel
             }
         }
 
+        public void ClearData()
+        {
+            _folderOrImageDAB.Clear();
+            FolderOrImageDAB.Clear();
+        }
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void NotifyPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected virtual void NotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         #endregion INotifyPropertyChanged
     }

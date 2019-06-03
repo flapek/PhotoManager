@@ -28,6 +28,7 @@ namespace PhotoManager
             InitializeComponent();
 
             CarouselFolderOrImage.SelectionChanged += CarouselFolderOrImage_SelectionChanged;
+
         }
 
         #region Carousel Control
@@ -84,6 +85,7 @@ namespace PhotoManager
             MainViewModel viewModel = DataContext as MainViewModel;
 
             int? currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders, viewModel.SelectedFolderOrImage.Id);
+
             if (currentId == 0)
                 return;
 
@@ -91,10 +93,23 @@ namespace PhotoManager
 
             ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, currentId);
 
-            foreach (DataModel item in dataModel)
-                viewModel.FolderOrImageDAB.Add(item);
+            DataContext = new MainViewModel(dataModel);
+        }
 
+        private async void ButtonNext_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainViewModel viewModel = DataContext as MainViewModel;
 
+            int id = viewModel.SelectedFolderOrImage.Id;
+
+            viewModel.ClearData();
+
+            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
+
+            if (dataModel.Count == 0)
+                return;
+
+            DataContext = new MainViewModel(dataModel);
         }
 
         #endregion
@@ -167,5 +182,6 @@ namespace PhotoManager
         #endregion
 
         #endregion
+
     }
 }

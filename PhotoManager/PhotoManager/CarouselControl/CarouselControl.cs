@@ -6,18 +6,11 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using System.ComponentModel;
 using System.Collections;
-using PhotoManager.ViewModel;
-using PhotoManager.Model;
-using System.Collections.ObjectModel;
-using PhotoManager.Workers.LoadData;
-using System.Windows.Data;
 
 namespace PhotoManager.CarouselControl
 {
     public class CarouselControl : Canvas, ICarouselControl
     {
-        private PhotoManagerDBEntities managerDBEntities = new PhotoManagerDBEntities();
-
         public CarouselControl()
         {
             timer.Tick += TimerTick;
@@ -28,26 +21,7 @@ namespace PhotoManager.CarouselControl
             canvas = new Canvas();
             canvas.HorizontalAlignment = HorizontalAlignment.Stretch;
             canvas.VerticalAlignment = VerticalAlignment.Stretch;
-            canvas.MouseRightButtonDown += Canvas_MouseRightButtonDownAsync;
             Children.Add(canvas);
-        }
-
-        private async void Canvas_MouseRightButtonDownAsync(object sender, MouseButtonEventArgs e)
-        {
-            MainViewModel viewModel = DataContext as MainViewModel;
-
-            int id = viewModel.SelectedFolderOrImage.Id;
-
-            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
-
-            if (dataModel.Count == 0)
-                return;
-
-            viewModel.FolderOrImageDAB.Clear();
-            DataContext = new MainViewModel(dataModel);
-
-            //foreach (DataModel item in dataModel)
-            //    viewModel.FolderOrImageDAB.Add(item);
         }
 
         ~CarouselControl()
@@ -157,7 +131,9 @@ namespace PhotoManager.CarouselControl
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(CarouselControl), new FrameworkPropertyMetadata((IEnumerable)null, new PropertyChangedCallback(OnItemsSourceChanged)));
+        public static readonly DependencyProperty ItemsSourceProperty = 
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(CarouselControl), 
+                new FrameworkPropertyMetadata((IEnumerable)null, new PropertyChangedCallback(OnItemsSourceChanged)));
 
         public IEnumerable ItemsSource
         {
@@ -172,11 +148,15 @@ namespace PhotoManager.CarouselControl
 
         protected virtual void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)
         {
+            if (e.OldValue !=null)
+            {
+                canvas.Children.Clear();
+            }
             if (e.NewValue != null)
             {
                 foreach (var item in (IEnumerable)e.NewValue)
                 {
-                    var itemControl = new Control();
+                    Control itemControl = new Control();
                     itemControl.Template = CarouselItemTemplate;
 
                     itemControl.DataContext = item;
@@ -344,7 +324,8 @@ namespace PhotoManager.CarouselControl
 
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public static readonly DependencyProperty VerticalOrientationProperty = DependencyProperty.Register("VerticalOrientationProperty", typeof(bool), typeof(CarouselControl), new FrameworkPropertyMetadata(false, new PropertyChangedCallback(OnVerticalOrientationChanged)));
+        public static readonly DependencyProperty VerticalOrientationProperty = DependencyProperty.Register("VerticalOrientationProperty", 
+            typeof(bool), typeof(CarouselControl), new FrameworkPropertyMetadata(false, new PropertyChangedCallback(OnVerticalOrientationChanged)));
 
         public bool VerticalOrientation
         {
