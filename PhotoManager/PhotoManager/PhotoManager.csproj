@@ -98,6 +98,7 @@
     <Compile Include="Window_AddPhoto.xaml.cs">
       <DependentUpon>Window_AddPhoto.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Workers\String\BuildString\CreateString.cs" />
     <Compile Include="Workers\GetId\GetId.cs" />
     <Compile Include="Model\DB_Model.Context.cs">
       <AutoGen>True</AutoGen>
@@ -146,6 +147,7 @@
     <Compile Include="Workers\Open\FileExplorer.cs" />
     <Compile Include="Workers\Open\OpenEditingProgram.cs" />
     <Compile Include="Workers\Converters\WidthConverter.cs" />
+    <Compile Include="Workers\String\GetStringFromPath.cs" />
     <Page Include="FolderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

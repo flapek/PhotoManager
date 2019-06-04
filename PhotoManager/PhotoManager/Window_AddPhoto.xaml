@@ -87,7 +87,7 @@
                          Grid.Column="1" Margin="16"/>
                 <Button x:Name="ButtonBrowser" Content="Browse" Grid.Column="2" 
                         Style="{StaticResource SettingsButton}" Margin="12"
-                        ToolTip="Search photo to add" Click="ButtonBrowser_OnClick"/>
+                        ToolTip="Search photo to add" Click="ButtonBrowser_OnClickAsync"/>
             </Grid>
 
             <Grid Grid.Row="1">
@@ -110,7 +110,10 @@
                              Style="{StaticResource BaseStyleRichTextBox}"/>
             </StackPanel>
 
-            <Image x:Name="ImageContainer" Grid.Row="3" Margin="10" Stretch="Uniform"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" CanContentScroll="True" 
+                          Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="10">
+                <StackPanel x:Name="StackPanelPhotoContainer"/>
+            </ScrollViewer>
 
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>

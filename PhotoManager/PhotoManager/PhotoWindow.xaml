@@ -140,11 +140,7 @@
 
                         <Border Grid.Row="1" Margin="10" CornerRadius="20" BorderThickness="3"
                                 BorderBrush="#FFAAD5E5" Background="WhiteSmoke">
-                            <Image Margin="5" x:Name="ImageHandler">
-                                <Image.OpacityMask>
-                                    <ImageBrush Stretch="Uniform"/>
-                                </Image.OpacityMask>
-                            </Image>
+                            <Image Margin="5" x:Name="ImageHandler" Stretch="Uniform"/>
                         </Border>
                     </Grid>
 
