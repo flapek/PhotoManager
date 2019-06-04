@@ -1,10 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using MaterialDesignThemes.Wpf;
 using PhotoManager.Model;
 using PhotoManager.ViewModel;
+using PhotoManager.Workers;
 using PhotoManager.Workers.LoadData;
 
 namespace PhotoManager
@@ -74,6 +78,7 @@ namespace PhotoManager
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
+            LoadPhotoFromEntity();
         }
 
         #endregion
@@ -95,10 +100,45 @@ namespace PhotoManager
 
         private void WindowAddPhoto_Closing(object sender, System.EventArgs e)
         {
-            throw new System.NotImplementedException();
+            LoadPhotoFromEntity();
         }
 
         #endregion
 
+        #region Local Function
+
+        private void LoadPhotoFromEntity()
+        {
+            ListBoxPhoto.Items.Clear();
+
+            foreach (Images image in managerDBEntities.Images)
+            {
+                ListBoxItem item = new ListBoxItem
+                {
+                    Content = image.Name,
+                    Tag = image.Id
+                };
+
+                ListBoxPhoto.Items.Add(item);
+
+                item.MouseDoubleClick += Item_MouseDoubleClickAsync;
+            }
+        }
+
+        #endregion
+
+        #region ListBox interaction
+
+        private async void Item_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        {
+            ListBoxItem item = (ListBoxItem)sender;
+            int id = Convert.ToInt32(item.Tag.ToString());
+            byte[] image = managerDBEntities.Images.Where(x => x.Id == id).Select(x => x.MetaDataPicture).First();
+
+            ImageHandler.Source = await ImageConverter.ConvertByteArrayToBitmapImage(image);
+            TextBoxPhotoName.Text = item.Content.ToString();
+        }
+
+        #endregion
     }
 }

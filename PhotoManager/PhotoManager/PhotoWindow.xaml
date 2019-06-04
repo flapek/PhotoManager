@@ -93,7 +93,7 @@
                 </Grid>
 
                 <Grid Grid.Row="1">
-                    <ListBox x:Name="ListBoxPhoto" SelectionMode="Multiple" Margin="10" 
+                    <ListBox x:Name="ListBoxPhoto" SelectionMode="Single" Margin="10" 
                              Background="White"/>
                 </Grid>
 

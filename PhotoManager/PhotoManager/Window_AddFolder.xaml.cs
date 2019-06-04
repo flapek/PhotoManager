@@ -41,7 +41,6 @@ namespace PhotoManager
                 }
             }
             else Close();
-
         }
 
         #endregion
@@ -74,7 +73,7 @@ namespace PhotoManager
                     Name = TextBoxFolderName.Text,
                     Description = new TextRange(RichTextBoxFolderDescription.Document.ContentStart, RichTextBoxFolderDescription.Document.ContentEnd).Text,
                     ParentFolder = null,
-                    MetaDataPicture = ImageConverter.ConvertImageToByteArray(new BitmapImage(new Uri(folderPath)))
+                    MetaDataPicture = await ImageConverter.ConvertImageToByteArray(new BitmapImage(new Uri(folderPath)))
             });
             }
             else
@@ -84,13 +83,13 @@ namespace PhotoManager
                     Name = TextBoxFolderName.Text,
                     Description = new TextRange(RichTextBoxFolderDescription.Document.ContentStart, RichTextBoxFolderDescription.Document.ContentEnd).Text,
                     ParentFolder = Convert.ToInt32(selectedTag),
-                    MetaDataPicture = ImageConverter.ConvertImageToByteArray(new BitmapImage(new Uri(folderPath)))
+                    MetaDataPicture = await ImageConverter.ConvertImageToByteArray(new BitmapImage(new Uri(folderPath)))
                 });
             }
             int done = await managerDBEntities.SaveChangesAsync();
             if (done == 1)
             {
-                MessageBox.Show(Constants.MessageBoxTagIsAdded, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Constants.MessageBoxFolderIsAdded, Constants.CaptionNameInformation, MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             TextBoxFolderName.Text = string.Empty;

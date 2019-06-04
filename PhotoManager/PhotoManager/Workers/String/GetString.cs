@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace PhotoManager.Workers.String
 {
-    class GetStringFromPath
+    class GetString
     {
         private static string pattern = @"[a-zA-Z0-9!@#$%^&*()_-]*\..*";
 
-        public static async Task<string> OneStringTask(string s)
+        public static string OneStringFromPath(string s)
         {
             Regex regex = new Regex(pattern);
 
             return regex.Match(s).ToString();
         }
 
-        public static async Task<string[]> StringListTask(string[] stringArray)
+        public static async Task<string[]> StringListFromPathListTask(string[] stringArray)
         {
             Regex regex = new Regex(pattern);
 

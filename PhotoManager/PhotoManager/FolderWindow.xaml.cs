@@ -86,6 +86,102 @@ namespace PhotoManager
 
         #endregion
 
+        //dodać wyświetlnie comboboxu odpowiedniego 
+        #region TreeView interaction
+
+        private void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)sender;
+            int folderID = Convert.ToInt32(item.Tag.ToString());
+            IQueryable<string> foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description);
+
+            TextBoxFolderName.Text = item.Header.ToString();
+            TextBoxFolderName.Tag = item.Tag;
+
+            //if (managerDBEntities.Folders.Where(x => x.Id == folderID && x.ParentFolder != null) != null)
+            //{
+            //    ComboBoxParentFolder.SelectedValuePath = managerDBEntities.Folders.Where(x => x.ParentFolder == folderID).Select(x => x.Name).First().ToString();
+            //}
+
+            foreach (string text in foldersDescription)
+            {
+                RichTextBoxFolderDescription.Selection.Text = text;
+            }
+        }
+
+        #endregion
+
+        #region CheckBox click
+
+        private void CheckBoxCanEdit_Checked(object sender, RoutedEventArgs e)
+        {
+            TextBoxFolderName.IsEnabled = true;
+            ComboBoxParentFolder.IsEnabled = true;
+            RichTextBoxFolderDescription.IsEnabled = true;
+        }
+
+        private void CheckBoxCanEdit_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TextBoxFolderName.IsEnabled = false;
+            ComboBoxParentFolder.IsEnabled = false;
+            RichTextBoxFolderDescription.IsEnabled = false;
+        }
+
+        #endregion
+
+        //do poprawy całe
+        #region Data change
+
+        private void RichTextBoxFolderDescription_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
+            int folderID = Convert.ToInt32(selectedFolder.Tag.ToString());
+            string foldersDescription = string.Empty;
+            try
+            {
+                foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description).First();
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+
+
+            if (foldersDescription == RichTextBoxFolderDescription.Selection.Text)
+            {
+                ButtonSaveChanges.IsEnabled = false;
+                isDataDirty = false;
+            }
+            else
+            {
+                ButtonSaveChanges.IsEnabled = true;
+                isDataDirty = true;
+            }
+
+        }
+
+        private void TextBoxFolderName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
+
+            if (selectedFolder.Name == TextBoxFolderName.Text)
+            {
+                ButtonSaveChanges.IsEnabled = false;
+                isDataDirty = false;
+            }
+            else
+            {
+                ButtonSaveChanges.IsEnabled = true;
+                isDataDirty = true;
+            }
+
+
+        }
+
+        //dodać obsługe sprawdzającą czy nie zmienił się comboBox
+
+        #endregion
+
         #region Local function
 
         private void DataIsSucessfulyDelete()
@@ -185,102 +281,6 @@ namespace PhotoManager
 
             managerDBEntities.Folders.Remove(folder);
         }
-
-        #endregion
-
-        //dodać wyświetlnie comboboxu odpowiedniego 
-        #region TreeView interaction
-
-        private void Item_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            TreeViewItem item = (TreeViewItem)sender;
-            int folderID = Convert.ToInt32(item.Tag.ToString());
-            IQueryable<string> foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description);
-
-            TextBoxFolderName.Text = item.Header.ToString();
-            TextBoxFolderName.Tag = item.Tag;
-
-            //if (managerDBEntities.Folders.Where(x => x.Id == folderID && x.ParentFolder != null) != null)
-            //{
-            //    ComboBoxParentFolder.SelectedValuePath = managerDBEntities.Folders.Where(x => x.ParentFolder == folderID).Select(x => x.Name).First().ToString();
-            //}
-
-            foreach (string text in foldersDescription)
-            {
-                RichTextBoxFolderDescription.Selection.Text = text;
-            }
-        }
-
-        #endregion
-
-        #region CheckBox click
-
-        private void CheckBoxCanEdit_Checked(object sender, RoutedEventArgs e)
-        {
-            TextBoxFolderName.IsEnabled = true;
-            ComboBoxParentFolder.IsEnabled = true;
-            RichTextBoxFolderDescription.IsEnabled = true;
-        }
-
-        private void CheckBoxCanEdit_Unchecked(object sender, RoutedEventArgs e)
-        {
-            TextBoxFolderName.IsEnabled = false;
-            ComboBoxParentFolder.IsEnabled = false;
-            RichTextBoxFolderDescription.IsEnabled = false;
-        }
-
-        #endregion
-
-        //do poprawy całe
-        #region Data change
-
-        private void RichTextBoxFolderDescription_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
-            int folderID = Convert.ToInt32(selectedFolder.Tag.ToString());
-            string foldersDescription = string.Empty;
-            try
-            {
-                foldersDescription = managerDBEntities.Folders.Where(x => x.Id == folderID).Select(x => x.Description).First();
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
-
-
-            if (foldersDescription == RichTextBoxFolderDescription.Selection.Text)
-            {
-                ButtonSaveChanges.IsEnabled = false;
-                isDataDirty = false;
-            }
-            else
-            {
-                ButtonSaveChanges.IsEnabled = true;
-                isDataDirty = true;
-            }
-
-        }
-
-        private void TextBoxFolderName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
-
-            if (selectedFolder.Name == TextBoxFolderName.Text)
-            {
-                ButtonSaveChanges.IsEnabled = false;
-                isDataDirty = false;
-            }
-            else
-            {
-                ButtonSaveChanges.IsEnabled = true;
-                isDataDirty = true;
-            }
-
-
-        }
-
-        //dodać obsługe sprawdzającą czy nie zmienił się comboBox
 
         #endregion
     }

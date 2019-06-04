@@ -12,7 +12,7 @@ namespace PhotoManager.Workers.LoadData
         {
             ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 foreach (Folders folder in folders)
                 {
@@ -22,7 +22,7 @@ namespace PhotoManager.Workers.LoadData
                         {
                             Id = folder.Id,
                             Name = folder.Name,
-                            ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
+                            ImageSource = await ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
                             Description = folder.Description,
                             ParentFolder = folder.ParentFolder,
                             IsFolder = true,
@@ -38,7 +38,7 @@ namespace PhotoManager.Workers.LoadData
         {
             ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 foreach (Folders folder in folders.Where(x => x.ParentFolder == id))
                 {
@@ -46,7 +46,7 @@ namespace PhotoManager.Workers.LoadData
                     {
                         Id = folder.Id,
                         Name = folder.Name,
-                        ImageSource = ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
+                        ImageSource = await ImageConverter.ConvertByteArrayToBitmapImage(folder.MetaDataPicture),
                         Description = folder.Description,
                         ParentFolder = folder.ParentFolder,
                         IsFolder = true

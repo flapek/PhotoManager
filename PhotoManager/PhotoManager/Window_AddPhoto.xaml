@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:PhotoManager.Workers"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Add photo" MinHeight="640" MinWidth="460" Width="460" Height="640" 
+        Title="Add photo" MinHeight="740" MinWidth="500" Width="500" Height="740" 
         WindowStartupLocation="CenterScreen" Name="Window" WindowStyle="None" 
         MouseDown="Window_MouseDown" Loaded="Window_Loaded">
     <Window.Background>
@@ -73,6 +73,7 @@
                 <RowDefinition Height="140"/>
                 <RowDefinition/>
                 <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
 
             <Grid>
@@ -84,7 +85,7 @@
 
                 <Label Style="{StaticResource BaseStyleLabel}" Content="Path" Margin="10"/>
                 <TextBox x:Name="TextBoxPathToPhoto" Style="{StaticResource BaseStyleTextBox}"
-                         Grid.Column="1" Margin="16"/>
+                         Grid.Column="1" Margin="16" TextChanged="TextBoxPathToPhoto_OnTextChanged"/>
                 <Button x:Name="ButtonBrowser" Content="Browse" Grid.Column="2" 
                         Style="{StaticResource SettingsButton}" Margin="12"
                         ToolTip="Search photo to add" Click="ButtonBrowser_OnClickAsync"/>
@@ -121,8 +122,28 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonSavePhoto" Style="{StaticResource SettingsButton}"
-                        Content="Add" Margin="50 10" Click="ButtonSavePhoto_OnClick"
+                <StackPanel>
+                    <Label Style="{StaticResource LabelStyleCentred}" Content="Folder"/>
+                    <ComboBox x:Name="ComboBoxParentFolder" 
+                              Style="{StaticResource BaseStyleComboBox}" Margin="20 5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Label Style="{StaticResource LabelStyleCentred}" Content="Tags"/>
+                    <ComboBox x:Name="ComboBoxTags" IsEnabled="False"
+                              Style="{StaticResource BaseStyleComboBox}" Margin="20 5"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ButtonAddPhoto" 
+                        Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}"
+                        Content="Add" Margin="50 10" Click="ButtonAddPhoto_OnClickAsync"
                         ToolTip="Add photo to resource"/>
 
                 <Button x:Name="ButtonCancel" Style="{StaticResource SettingsButton}"

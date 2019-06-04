@@ -1,11 +1,12 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace PhotoManager.Workers
 {
     class ImageConverter
     {
-        public static byte[] ConvertImageToByteArray(BitmapImage bitmapImage)
+        public static async Task<byte[]> ConvertImageToByteArray(BitmapImage bitmapImage)
         {
             MemoryStream memoryStream = new MemoryStream();
             JpegBitmapEncoder jpggBitmapEncoder = new JpegBitmapEncoder();
@@ -14,7 +15,7 @@ namespace PhotoManager.Workers
             return memoryStream.ToArray();
         }
 
-        public static BitmapImage ConvertByteArrayToBitmapImage(byte[] imageData)
+        public static async Task<BitmapImage> ConvertByteArrayToBitmapImage(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0) return null;
             BitmapImage bitmapImage = new BitmapImage();

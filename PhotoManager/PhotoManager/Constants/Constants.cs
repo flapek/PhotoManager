@@ -14,6 +14,7 @@
         public const string MessageBoxStringWarningSaveOption = "Do you want save option?";
         public const string MessageBoxStringClose = "Data is dirty. Close without saving?";
         public const string MessageBoxFolderIsAdded = "Folder is added.";
+        public const string MessageBoxPhotosIsAdded = "Photo(s) is added.";
         public const string MessageBoxTagIsAdded = "Tag is added.";
         public const string MessageBoxDelete = "Do you want delete it?";
         public const string MessageBoxDeleteAll = "Do you want delete all items from this place?";
@@ -22,6 +23,7 @@
         public const string MessageBoxDataDelete = "Data is sucessfuly delete.";
         public const string MessageBoxNoMoreDate = "No more information.";
         public const string MessageBoxCantBack = "You can't back more!";
+        public const string MessageBoxWarningIncorectData = "Choose folder or check path!!!";
 
         #endregion
 
