@@ -32,7 +32,7 @@ namespace PhotoManager
 
         private void ButtonCloseWindow_Click(object sender, MouseButtonEventArgs e)
         {
-            if (isDataDirty == true)
+            if (isDataDirty)
             {
                 if (MessageBox.Show(Constants.MessageBoxStringClose, Constants.CaptionNameWarning,
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)

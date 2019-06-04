@@ -138,6 +138,9 @@ namespace PhotoManager
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+
             LoadTagsFromEntity();
         }
 

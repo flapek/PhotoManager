@@ -75,3 +75,5 @@ C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\Pho
 C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\PhotoManager.exe
 C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\PhotoManager.pdb
 C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\PhotoManager.csprojAssemblyReference.cache
+C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\Window_AddPhoto.g.cs
+C:\Users\filap\source\repos\PhotoManager\PhotoManager\PhotoManager\obj\Debug\Window_AddPhoto.baml

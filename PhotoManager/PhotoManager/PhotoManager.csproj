@@ -95,6 +95,9 @@
     <Compile Include="FolderWindow.xaml.cs">
       <DependentUpon>FolderWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window_AddPhoto.xaml.cs">
+      <DependentUpon>Window_AddPhoto.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Workers\GetId\GetId.cs" />
     <Compile Include="Model\DB_Model.Context.cs">
       <AutoGen>True</AutoGen>
@@ -225,6 +228,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window_AddFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window_AddPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

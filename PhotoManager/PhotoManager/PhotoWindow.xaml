@@ -163,7 +163,9 @@
                         <StackPanel Grid.Row="1" Margin="5,10">
                             <Label FontSize="16" Style="{StaticResource BaseStyleLabel}"
                                    Content="Tags"/>
-                            <ListBox x:Name="ListBoxTag" Height="auto" Margin="5" IsEnabled="False"/>
+                            <ListBox x:Name="ListBoxTag" Height="auto" Margin="5" IsEnabled="False" 
+                                     MaxHeight="{Binding ElementName=Window,Path=ActualHeight,
+                                Converter={StaticResource WidthConverter}, ConverterParameter=38}"/>
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
