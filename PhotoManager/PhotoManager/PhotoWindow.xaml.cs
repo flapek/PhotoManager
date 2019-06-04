@@ -76,5 +76,12 @@ namespace PhotoManager
         }
 
         #endregion
+
+        #region Button click
+
+        private void ButtonCancelChanges_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+
+        #endregion
+
     }
 }

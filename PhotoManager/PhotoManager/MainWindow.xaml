@@ -207,7 +207,7 @@
                     </Grid.ColumnDefinitions>
                     <Button Name="ButtonBack" ToolTip="Previous photo/folder"
                             Style="{StaticResource StyleNoneButton}" 
-                            MouseDoubleClick="ButtonBack_MouseDoubleClickAsync">
+                            Click="ButtonBack_OnClickAsync">
                         <materialDesign:PackIcon Kind="ArrowBack" Foreground="#FF313131" Width="40" 
                                                  Height="40"/>
                     </Button>

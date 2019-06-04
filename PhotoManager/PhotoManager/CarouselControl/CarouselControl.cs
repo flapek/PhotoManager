@@ -149,9 +149,8 @@ namespace PhotoManager.CarouselControl
         protected virtual void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.OldValue != null)
-            {
                 canvas.Children.Clear();
-            }
+            
             if (e.NewValue != null)
             {
                 foreach (var item in (IEnumerable)e.NewValue)

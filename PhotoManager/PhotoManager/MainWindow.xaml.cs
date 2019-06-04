@@ -99,6 +99,26 @@ namespace PhotoManager
             DataContext = new MainViewModel(dataModel);
         }
 
+        private async void ButtonBack_OnClickAsync(object sender, RoutedEventArgs e)
+        {
+            MainViewModel viewModel = DataContext as MainViewModel;
+
+            int? currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders, viewModel.SelectedFolderOrImage.Id);
+
+            if (currentId == 0)
+            {
+                MessageBox.Show(Constants.MessageBoxCantBack, Constants.CaptionNameInformation, MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return;
+            }
+
+            viewModel.FolderOrImageDAB.Clear();
+
+            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, currentId);
+
+            DataContext = new MainViewModel(dataModel);
+        }
+
         private async void ButtonNext_OnClick(object sender, RoutedEventArgs e)
         {
             MainViewModel viewModel = DataContext as MainViewModel;
