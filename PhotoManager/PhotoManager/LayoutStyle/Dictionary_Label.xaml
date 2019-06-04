@@ -11,7 +11,8 @@
         <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
     </Style>
 
-    <Style x:Key="LabelStyleCentred" TargetType="Label">
+    <Style x:Key="LabelStyleCentred" TargetType="Label"
+           BasedOn="{StaticResource BaseStyleLabel}">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

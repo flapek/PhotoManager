@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
 using PhotoManager.Model;
 using PhotoManager.ViewModel;
 using PhotoManager.Workers.LoadData;
@@ -80,6 +81,22 @@ namespace PhotoManager
         #region Button click
 
         private void ButtonCancelChanges_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+
+        private void ButtonAddPhoto_OnClick(object sender, RoutedEventArgs e)
+        {
+            Window_AddPhoto windowAddPhoto = new Window_AddPhoto();
+            windowAddPhoto.Closing += WindowAddPhoto_Closing;
+            windowAddPhoto.ShowDialog();
+        }
+
+        #endregion
+
+        #region Other window event
+
+        private void WindowAddPhoto_Closing(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
 
         #endregion
 

@@ -60,5 +60,22 @@ namespace PhotoManager
         }
 
         #endregion
+
+        #region Button click
+
+        private void ButtonSavePhoto_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ButtonBrowser_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ButtonCancel_OnMouseClick(object sender, RoutedEventArgs e) => Close();
+
+        #endregion
+       
     }
 }

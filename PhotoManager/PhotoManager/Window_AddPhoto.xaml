@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:PhotoManager.Workers"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Add photo" MinHeight="400" MinWidth="600" Width="800" Height="500" 
+        Title="Add photo" MinHeight="640" MinWidth="460" Width="460" Height="640" 
         WindowStartupLocation="CenterScreen" Name="Window" WindowStyle="None" 
         MouseDown="Window_MouseDown" Loaded="Window_Loaded">
     <Window.Background>
@@ -67,7 +67,66 @@
         </Grid>
 
         <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="140"/>
+                <RowDefinition/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Style="{StaticResource BaseStyleLabel}" Content="Path" Margin="10"/>
+                <TextBox x:Name="TextBoxPathToPhoto" Style="{StaticResource BaseStyleTextBox}"
+                         Grid.Column="1" Margin="16"/>
+                <Button x:Name="ButtonBrowser" Content="Browse" Grid.Column="2" 
+                        Style="{StaticResource SettingsButton}" Margin="12"
+                        ToolTip="Search photo to add" Click="ButtonBrowser_OnClick"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Style="{StaticResource BaseStyleLabel}" Content="Name" Margin="10"/>
+                <TextBox x:Name="TextBoxPhotoName" Style="{StaticResource BaseStyleTextBox}"
+                         Grid.Column="1" Margin="16"/>
+            </Grid>
+
+            <StackPanel Grid.Row="2">
+                <Label Content="Description" Style="{StaticResource LabelStyleCentred}"/>
+
+                <RichTextBox x:Name="RichTextBoxPhotoDescription" 
+                             VerticalScrollBarVisibility="Visible"
+                             Style="{StaticResource BaseStyleRichTextBox}"/>
+            </StackPanel>
+
+            <Image x:Name="ImageContainer" Grid.Row="3" Margin="10" Stretch="Uniform"/>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ButtonSavePhoto" Style="{StaticResource SettingsButton}"
+                        Content="Add" Margin="50 10" Click="ButtonSavePhoto_OnClick"
+                        ToolTip="Add photo to resource"/>
+
+                <Button x:Name="ButtonCancel" Style="{StaticResource SettingsButton}"
+                        Grid.Column="1" Content="Cancel" Margin="50 10" 
+                        ToolTip="Cancel adding photo" 
+                        Click="ButtonCancel_OnMouseClick"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

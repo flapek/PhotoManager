@@ -104,7 +104,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="ButtonAddPhoto" Style="{StaticResource SettingsButton}"
-                            Content="Add photo" ToolTip="Add photo to resource" Grid.Column="0"/>
+                            Content="Add photo" ToolTip="Add photo to resource" Grid.Column="0"
+                            Click="ButtonAddPhoto_OnClick"/>
                     <Button x:Name="ButtonDeletePhoto" Grid.Column="1" 
                             Style="{StaticResource SettingsButton}" Content="Delete photo"
                             ToolTip="Delete choosen photo"/>
