@@ -168,11 +168,13 @@
                     </Grid>
 
                     <Grid Grid.Column="2">
-                        <Button x:Name="OkOptionButton" Content="Ok" Style="{StaticResource SettingsButton}"/>
+                        <Button x:Name="OkOptionButton" Content="Ok" Style="{StaticResource SettingsButton}" 
+                                Click="OkOptionButton_OnClick"/>
                     </Grid>
 
                     <Grid Grid.Column="3">
-                        <Button x:Name="CancelOptionButton" Content="Cancel" Style="{StaticResource SettingsButton}"/>
+                        <Button x:Name="CancelOptionButton" Content="Cancel" Style="{StaticResource SettingsButton}"
+                                Click="CancelOptionButton_OnClick"/>
                     </Grid>
                 </Grid>
             </Grid>

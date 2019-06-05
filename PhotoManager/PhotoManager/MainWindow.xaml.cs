@@ -28,6 +28,17 @@ namespace PhotoManager
             InitializeComponent();
 
             CarouselFolderOrImage.SelectionChanged += CarouselFolderOrImage_SelectionChanged;
+            CarouselFolderOrImage.MouseRightButtonDown += CarouselFolderOrImage_MouseRightButtonDown;
+        }
+
+        private void CarouselFolderOrImage_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MainViewModel itemModel = DataContext as MainViewModel;
+            if (itemModel.SelectedFolderOrImage.IsFolder)
+                return;
+
+            Window_PhotoView windowPhotoView = new Window_PhotoView(itemModel.SelectedFolderOrImage);
+            windowPhotoView.ShowDialog();
         }
 
         #region Carousel Control
@@ -82,8 +93,20 @@ namespace PhotoManager
         private async void ButtonBack_OnClickAsync(object sender, RoutedEventArgs e)
         {
             MainViewModel viewModel = DataContext as MainViewModel;
+            int? currentId = 0;
+            if (viewModel.SelectedFolderOrImage.IsFolder)
+            {
+                currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders,
+                    viewModel.SelectedFolderOrImage.Id);
+            }
+            else
+            {
+                int? id = await GetId.GetCurrentFolderId(managerDBEntities.Images,
+                    viewModel.SelectedFolderOrImage.Id);
+               
+                currentId = managerDBEntities.Folders.Where(x => x.Id == id).Select(x => x.ParentFolder).First();
+            }
 
-            int? currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders, viewModel.SelectedFolderOrImage.Id);
 
             if (currentId == 0)
             {
@@ -103,7 +126,7 @@ namespace PhotoManager
 
             if (currentId != null)
             {
-                foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Images,currentId))
+                foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Images, currentId))
                 {
                     dataModel.Add(itemModel);
                 }

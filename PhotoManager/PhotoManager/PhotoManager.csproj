@@ -31,7 +31,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -97,6 +97,9 @@
     </Compile>
     <Compile Include="Window_AddPhoto.xaml.cs">
       <DependentUpon>Window_AddPhoto.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window_PhotoView.xaml.cs">
+      <DependentUpon>Window_PhotoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Workers\String\BuildString\CreateString.cs" />
     <Compile Include="Workers\GetId\GetId.cs" />
@@ -234,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window_AddPhoto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window_PhotoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

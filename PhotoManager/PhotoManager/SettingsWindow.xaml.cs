@@ -31,7 +31,6 @@ namespace PhotoManager
 
         private void ButtonCloseWindow_Click(object sender, MouseButtonEventArgs e) => Close();
 
-
         #endregion
 
         #region Choose option
@@ -57,7 +56,7 @@ namespace PhotoManager
             TestPanel.Visibility = Visibility.Visible;
         }
 
-        #region Button interaction
+        #region Button click
 
         private void SaveOptionButton_Click(object sender, RoutedEventArgs e)
         {
@@ -85,6 +84,40 @@ namespace PhotoManager
             }
         }
 
+        private void SearchProgramPathButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileExplorer file = new FileExplorer("EXE (*.exe)|*.exe", false);
+            OpenFileDialog filename = file.Open(Environment.SpecialFolder.Desktop);
+            if (file.verificate)
+            {
+                isDataDirty = true;
+                SaveOptionButton.IsEnabled = true;
+                SourcePathToEditingProgramTextBox.Text = filename.FileName;
+            }
+        }
+
+        private void CancelOptionButton_OnClick(object sender, RoutedEventArgs e) => Close();
+
+        private void OkOptionButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (isDataDirty)
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show(Constants.MessageBoxStringWarningSaveOption, Constants.CaptionNameWarning, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (MessageBoxResult.Yes == messageBoxResult)
+                {
+                    userSettings.PathToEditingProgram = SourcePathToEditingProgramTextBox.Text;
+                    userSettings.Save();
+                    SaveOptionButton.IsEnabled = false;
+                    isDataDirty = false;
+                    Close();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Text Changed
+
         private void SourcePathToEditingProgramTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (!(userSettings.PathToEditingProgram == SourcePathToEditingProgramTextBox.Text))
@@ -99,21 +132,7 @@ namespace PhotoManager
             }
         }   //do poprawy
 
-        private void SearchProgramPathButton_Click(object sender, RoutedEventArgs e)
-        {
-            FileExplorer file = new FileExplorer("EXE (*.exe)|*.exe", false);
-            OpenFileDialog filename = file.Open(Environment.SpecialFolder.Desktop);
-            if (file.verificate)
-            {
-                isDataDirty = true;
-                SaveOptionButton.IsEnabled = true;
-                SourcePathToEditingProgramTextBox.Text = filename.FileName;
-            }
-        }
-
         #endregion
-
-
 
     }
 }

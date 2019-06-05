@@ -24,6 +24,5 @@ namespace PhotoManager.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Images> Images { get; set; }
-
     }
 }

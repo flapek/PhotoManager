@@ -1,0 +1,13 @@
+﻿<Window x:Class="PhotoManager.Window_PhotoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoManager"
+        mc:Ignorable="d"
+        Title="Window_PhotoView" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" Loaded="Window_PhotoView_OnLoadedAsync">
+    <Grid>
+        <Image x:Name="ImageHandler" Margin="5" Stretch="Uniform"/>
+    </Grid>
+</Window>
