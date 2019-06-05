@@ -95,10 +95,10 @@
                     </Button>
                     <Button x:Name="ButtonAddFolder" Style="{StaticResource SettingsButton}"
                             Content="Add folder" ToolTip="Add folder to resource" Grid.Column="1"
-                            MouseDoubleClick="ButtonAddFolder_MouseDoubleClick"/>
+                            Click="ButtonAddFolder_MouseClick"/>
                     <Button x:Name="ButtonDeleteFolder" Grid.Column="2" 
                             Style="{StaticResource SettingsButton}" Content="Delete folder"
-                            ToolTip="Delete choosen folder" MouseDoubleClick="ButtonDeleteFolder_MouseDoubleClickAsync"/>
+                            ToolTip="Delete choosen folder" Click="ButtonDeleteFolder_MouseClickAsync"/>
                 </Grid>
             </Grid>
 
@@ -159,7 +159,7 @@
 
                     <Button x:Name="ButtonCancelChanges" Grid.Column="2" Content="Cancel" 
                             Style="{StaticResource SettingsButton}" ToolTip="Cancel changes"
-                            MouseDoubleClick="ButtonCancelChanges_MouseDoubleClick"/>
+                            Click="ButtonCancelChanges_MouseClick"/>
                 </Grid>
             </Grid>
         </Grid>

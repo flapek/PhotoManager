@@ -46,7 +46,7 @@ namespace PhotoManager
 
         #region Button control
 
-        private async void ButtonAddTag_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        private async void ButtonAddTag_MouseClickAsync(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace PhotoManager
             }
         }
 
-        private async void ButtonDeleteTag_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        private async void ButtonDeleteTag_MouseClickAsync(object sender, RoutedEventArgs e)
         {
             ListBoxItem item = (ListBoxItem)ListBoxTag.SelectedItem;
 
@@ -90,7 +90,7 @@ namespace PhotoManager
             }
         }
 
-        private void ButtonCancel_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+        private void ButtonCancel_MouseClick(object sender, RoutedEventArgs e) => Close();
 
         #endregion
  

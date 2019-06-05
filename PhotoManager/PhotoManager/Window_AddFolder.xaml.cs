@@ -54,7 +54,7 @@ namespace PhotoManager
 
         #endregion
 
-        #region Button interaction
+        #region Button click
 
         /// <summary>
         /// Interaction with button click
@@ -62,7 +62,7 @@ namespace PhotoManager
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private async void ButtonSaveFolder_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        private async void ButtonSaveFolder_MouseClickAsync(object sender, RoutedEventArgs e)
         {
             string selectedTag = ((ComboBoxItem)ComboBoxParentFolder.SelectedItem).Tag.ToString();
 
@@ -100,7 +100,7 @@ namespace PhotoManager
             ComboBoxParentFolder.SelectedIndex = 0;
         }
 
-        private void ButtonCancelAddingFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+        private void ButtonCancelAddingFolder_MouseClick(object sender, RoutedEventArgs e) => Close();
 
         #endregion 
 

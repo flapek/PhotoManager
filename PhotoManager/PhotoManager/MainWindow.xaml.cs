@@ -79,26 +79,6 @@ namespace PhotoManager
                 DragMove();
         }
 
-        private async void ButtonBack_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
-        {
-            MainViewModel viewModel = DataContext as MainViewModel;
-
-            int? currentId = await GetId.GetCurrentFolderId(managerDBEntities.Folders, viewModel.SelectedFolderOrImage.Id);
-
-            if (currentId == 0)
-            {
-                MessageBox.Show(Constants.MessageBoxCantBack, Constants.CaptionNameInformation, MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-                return;
-            }
-
-            viewModel.FolderOrImageDAB.Clear();
-
-            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, currentId);
-
-            DataContext = new MainViewModel(dataModel);
-        }
-
         private async void ButtonBack_OnClickAsync(object sender, RoutedEventArgs e)
         {
             MainViewModel viewModel = DataContext as MainViewModel;
@@ -114,7 +94,20 @@ namespace PhotoManager
 
             viewModel.FolderOrImageDAB.Clear();
 
-            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, currentId);
+            ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
+
+            foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, currentId))
+            {
+                dataModel.Add(itemModel);
+            }
+
+            if (currentId != null)
+            {
+                foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Images,currentId))
+                {
+                    dataModel.Add(itemModel);
+                }
+            }
 
             DataContext = new MainViewModel(dataModel);
         }
@@ -122,21 +115,34 @@ namespace PhotoManager
         private async void ButtonNext_OnClick(object sender, RoutedEventArgs e)
         {
             MainViewModel viewModel = DataContext as MainViewModel;
-
-            int id = viewModel.SelectedFolderOrImage.Id;
-
-            viewModel.ClearData();
-
-            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id);
-
-            if (dataModel.Count == 0)
+            if (viewModel.SelectedFolderOrImage.IsFolder)
             {
-                MessageBox.Show(Constants.MessageBoxNoMoreDate, Constants.CaptionNameInformation, MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-                return;
+                int id = viewModel.SelectedFolderOrImage.Id;
+
+                viewModel.ClearData();
+
+                ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
+
+                foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders, id))
+                {
+                    dataModel.Add(itemModel);
+                }
+
+                foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Images, id))
+                {
+                    dataModel.Add(itemModel);
+                }
+
+                if (dataModel.Count == 0)
+                {
+                    MessageBox.Show(Constants.MessageBoxNoMoreDate, Constants.CaptionNameInformation, MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                    return;
+                }
+
+                DataContext = new MainViewModel(dataModel);
             }
 
-            DataContext = new MainViewModel(dataModel);
         }
 
         #endregion
@@ -148,7 +154,12 @@ namespace PhotoManager
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
-            ObservableCollection<DataModel> dataModel = await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders);
+            ObservableCollection<DataModel> dataModel = new ObservableCollection<DataModel>();
+
+            foreach (DataModel itemModel in await LoadCarouselDataModel.LoadCarouselModel(managerDBEntities.Folders))
+            {
+                dataModel.Add(itemModel);
+            }
 
             DataContext = new MainViewModel(dataModel);
         }

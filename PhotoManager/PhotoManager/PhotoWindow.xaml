@@ -108,7 +108,7 @@
                             Click="ButtonAddPhoto_OnClick"/>
                     <Button x:Name="ButtonDeletePhoto" Grid.Column="1" 
                             Style="{StaticResource SettingsButton}" Content="Delete photo"
-                            ToolTip="Delete choosen photo"/>
+                            ToolTip="Delete choosen photo" Click="ButtonDeletePhoto_OnClickAsync"/>
                 </Grid>
             </Grid>
 
@@ -199,7 +199,7 @@
 
                     <Button x:Name="ButtonCancelChanges" Grid.Column="2" Content="Cancel" 
                             Style="{StaticResource SettingsButton}" ToolTip="Cancel changes"
-                            MouseDoubleClick="ButtonCancelChanges_OnMouseDoubleClick"/>
+                            Click="ButtonCancelChanges_OnMouseClick"/>
                 </Grid>
             </Grid>
         </Grid>

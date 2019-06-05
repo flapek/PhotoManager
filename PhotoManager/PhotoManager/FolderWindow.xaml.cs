@@ -60,13 +60,13 @@ namespace PhotoManager
             LoadFolderFromEntity();
         }
 
-        private void ButtonAddFolder_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ButtonAddFolder_MouseClick(object sender, RoutedEventArgs e)
         {
             Window_AddFolder windowAddFolder = new Window_AddFolder();
             windowAddFolder.ShowDialog();
         }
 
-        private async void ButtonDeleteFolder_MouseDoubleClickAsync(object sender, MouseButtonEventArgs e)
+        private async void ButtonDeleteFolder_MouseClickAsync(object sender, RoutedEventArgs e)
         {
             TreeViewItem selectedFolder = (TreeViewItem)FolderView.SelectedItem;
             int folderId = Convert.ToInt32(selectedFolder.Tag.ToString());
@@ -82,7 +82,7 @@ namespace PhotoManager
             }
         }
 
-        private void ButtonCancelChanges_MouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+        private void ButtonCancelChanges_MouseClick(object sender, RoutedEventArgs e) => Close();
 
         #endregion
 
@@ -261,13 +261,13 @@ namespace PhotoManager
             if (folder == null)
                 return false;
 
-            await DeleteFolderAsync(folder);
+            await DeleteFolderAndPhotoAsync(folder);
             done = await managerDBEntities.SaveChangesAsync();
 
             return done != 0 ? true : false;
         }
 
-        private async Task DeleteFolderAsync(Folders folder)
+        private async Task DeleteFolderAndPhotoAsync(Folders folder)
         {
             IQueryable<Folders> folders = managerDBEntities.Folders.Where(x => x.ParentFolder == folder.Id);
 
@@ -275,7 +275,16 @@ namespace PhotoManager
             {
                 foreach (Folders subFolder in folders)
                 {
-                    await DeleteFolderAsync(subFolder);
+                    await DeleteFolderAndPhotoAsync(subFolder);
+                }
+            }
+
+            IQueryable<Images> imageses = managerDBEntities.Images.Where(x => x.FolderId == folder.Id);
+            if (imageses != null)
+            {
+                foreach (Images image in imageses)
+                {
+                    managerDBEntities.Images.Remove(image);
                 }
             }
 

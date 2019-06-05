@@ -112,11 +112,11 @@
 
                 <Button x:Name="ButtonSaveFolder" Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}"
                         Content="Save" ToolTip="Save folder"
-                        MouseDoubleClick="ButtonSaveFolder_MouseDoubleClickAsync"/>
+                        Click="ButtonSaveFolder_MouseClickAsync"/>
                 <Button x:Name="ButtonCancelAddingFolder" Grid.Column="1" 
                         Style="{StaticResource SettingsButton}" Content="Cancel"
                         ToolTip="Cancel adding folder" 
-                        MouseDoubleClick="ButtonCancelAddingFolder_MouseDoubleClick"/>
+                        Click="ButtonCancelAddingFolder_MouseClick"/>
             </Grid>
         </Grid>
     </Grid>

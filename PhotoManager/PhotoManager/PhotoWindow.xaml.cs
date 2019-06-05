@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using MaterialDesignThemes.Wpf;
 using PhotoManager.Model;
-using PhotoManager.ViewModel;
 using PhotoManager.Workers;
-using PhotoManager.Workers.LoadData;
 
 namespace PhotoManager
 {
@@ -58,6 +53,7 @@ namespace PhotoManager
             ComboBoxParentFolder.IsEnabled = true;
             ButtonAddTag.IsEnabled = true;
             ButtonDeleteTag.IsEnabled = true;
+            ButtonSaveChanges.IsEnabled = true;
         }
 
         private void CheckBoxCanEdit_OnUnchecked(object sender, RoutedEventArgs e)
@@ -67,6 +63,7 @@ namespace PhotoManager
             ComboBoxParentFolder.IsEnabled = false;
             ButtonAddTag.IsEnabled = false;
             ButtonDeleteTag.IsEnabled = false;
+            ButtonSaveChanges.IsEnabled = false;
         }
 
         #endregion
@@ -85,13 +82,37 @@ namespace PhotoManager
 
         #region Button click
 
-        private void ButtonCancelChanges_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => Close();
+        private void ButtonCancelChanges_OnMouseClick(object sender, RoutedEventArgs e) => Close();
 
         private void ButtonAddPhoto_OnClick(object sender, RoutedEventArgs e)
         {
             Window_AddPhoto windowAddPhoto = new Window_AddPhoto();
             windowAddPhoto.Closing += WindowAddPhoto_Closing;
             windowAddPhoto.ShowDialog();
+        }
+
+        private async void ButtonDeletePhoto_OnClickAsync(object sender, RoutedEventArgs e)
+        {
+            if (MessageBoxResult.Yes == MessageBox.Show(Constants.MessageBoxDelete,
+                    Constants.CaptionNameWarning, MessageBoxButton.YesNo, MessageBoxImage.Warning))
+            {
+                ListBoxItem item = (ListBoxItem)ListBoxPhoto.SelectedItem;
+                int id = Convert.ToInt32(item.Tag);
+
+                Images images = managerDBEntities.Images.Where(x => x.Id == id).First();
+                managerDBEntities.Images.Remove(images);
+
+                int done = await managerDBEntities.SaveChangesAsync();
+                if (done != 0)
+                {
+                    MessageBox.Show(Constants.MessageBoxDataDelete, Constants.CaptionNameInformation,
+                             MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    LoadPhotoFromEntity();
+                    TextBoxPhotoName.Text = string.Empty;
+                    ImageHandler.Source = null;
+                }
+            }
         }
 
         #endregion
@@ -140,5 +161,7 @@ namespace PhotoManager
         }
 
         #endregion
+
+
     }
 }

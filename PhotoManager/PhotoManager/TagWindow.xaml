@@ -93,20 +93,26 @@
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="1" Style="{StaticResource BaseStyleLabel}" Content="Tag name" Grid.ColumnSpan="3"/>
+                <Label Grid.Row="1" Style="{StaticResource BaseStyleLabel}" Content="Tag name" 
+                       Grid.ColumnSpan="3"/>
 
-                <TextBox x:Name="TextBoxTagName" Grid.Row="2" Style="{StaticResource BaseStyleTextBox}" Grid.ColumnSpan="3"
+                <TextBox x:Name="TextBoxTagName" Grid.Row="2" Style="{StaticResource BaseStyleTextBox}" 
+                         Grid.ColumnSpan="3"
                          TextChanged="TextBoxTagName_TextChanged"/>
 
-                <Button x:Name="ButtonAddTag" Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
+                <Button x:Name="ButtonAddTag" 
+                        Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
                         Content="Add tag" ToolTip="Add tag to resource" Grid.Row="5" Grid.Column="1" 
-                        MouseDoubleClick="ButtonAddTag_MouseDoubleClickAsync"/>
+                        Click="ButtonAddTag_MouseClickAsync"/>
 
-                <Button x:Name="ButtonDeleteTag" Grid.Column="1" Grid.Row="6" Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
-                        Content="Delete tag" ToolTip="Delete choosen tag" MouseDoubleClick="ButtonDeleteTag_MouseDoubleClickAsync"/>
+                <Button x:Name="ButtonDeleteTag" Grid.Column="1" Grid.Row="6" 
+                        Style="{StaticResource SettingsButtonSaveSettingsIsEnableFalse}" 
+                        Content="Delete tag" ToolTip="Delete choosen tag" 
+                        Click="ButtonDeleteTag_MouseClickAsync"/>
 
-                <Button x:Name="ButtonCancel" Grid.Column="1" Grid.Row="7" Style="{StaticResource SettingsButton}" 
-                        Content="Cancel" ToolTip="Cancel" MouseDoubleClick="ButtonCancel_MouseDoubleClick"/>
+                <Button x:Name="ButtonCancel" Grid.Column="1" Grid.Row="7" 
+                        Style="{StaticResource SettingsButton}" 
+                        Content="Cancel" ToolTip="Cancel" Click="ButtonCancel_MouseClick"/>
 
             </Grid>
         </Grid>
